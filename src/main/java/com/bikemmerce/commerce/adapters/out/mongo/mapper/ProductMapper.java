@@ -1,6 +1,6 @@
 package com.bikemmerce.commerce.adapters.out.mongo.mapper;
 
-import com.bikemmerce.commerce.adapters.out.mongo.document.ProductDocument;
+import com.bikemmerce.commerce.adapters.out.mongo.documents.dto.ProductDocument;
 import com.bikemmerce.commerce.domain.model.Product;
 import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
 

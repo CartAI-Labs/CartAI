@@ -1,4 +1,4 @@
-package com.bikemmerce.commerce.adapters.out.mongo.document;
+package com.bikemmerce.commerce.adapters.out.mongo.documents.dto;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -12,7 +12,6 @@ public class ProductDocument {
 
     @Id
     private final String id;
-
     private final String name;
     private final String description;
     private final BigDecimal price;
