@@ -14,8 +14,8 @@ public class ClearCartUseCase {
 
     private final CartRepositoryPort cartRepositoryPort;
 
-    public Result<Cart> execute(String id) {
-        Cart cart = cartRepositoryPort.find(new CustomerId(id));
+    public Result<Cart> execute(CustomerId customerId) {
+        Cart cart = cartRepositoryPort.find(customerId);
 
         if (cart != null) {
             cart.clearItems();

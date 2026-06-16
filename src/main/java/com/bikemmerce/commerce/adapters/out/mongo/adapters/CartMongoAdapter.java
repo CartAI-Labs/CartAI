@@ -23,7 +23,7 @@ public class CartMongoAdapter implements CartRepositoryPort {
 
     @Override
     public Cart find(CustomerId customerId) {
-        return cartMongoRepository.findById(customerId.value()).map(CartMapper::toDomain).orElseThrow();
+        return cartMongoRepository.findById(customerId.value()).map(CartMapper::toDomain).orElse(null);
     }
 
     @Override

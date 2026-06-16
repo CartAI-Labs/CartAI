@@ -18,17 +18,17 @@ public class AddShoppingItemToCartUseCase {
     private final CartRepositoryPort cartRepositoryPort;
     private final ProductRepositoryPort productRepositoryPort;
 
-    public Result<Cart> execute(String id, ProductId productId) {
+    public Result<Cart> execute(CustomerId customerId, ProductId productId) {
         Product product = productRepositoryPort.find(productId);
 
         if (product == null) {
             return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
-        Cart cart = cartRepositoryPort.find(new CustomerId(id));
+        Cart cart = cartRepositoryPort.find(customerId);
 
         if (cart == null) {
-            cart = new Cart(new CustomerId(id), new ArrayList<>());
+            cart = new Cart(customerId, new ArrayList<>());
         }
 
         cart.addItem(product, 1);

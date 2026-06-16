@@ -16,14 +16,12 @@ public class RemoveShoppingItemFromCartUseCase {
     private final CartRepositoryPort cartRepositoryPort;
     private final ProductRepositoryPort productRepositoryPort;
 
-    public Result<Cart> execute(String customerId, String id) {
-        Cart cart = cartRepositoryPort.find(new CustomerId(customerId));
+    public Result<Cart> execute(CustomerId customerId, ProductId productId) {
+        Cart cart = cartRepositoryPort.find(customerId);
 
         if (cart == null) {
             return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
-
-        ProductId productId = new ProductId(id);
 
         Product product = productRepositoryPort.find(productId);
 
