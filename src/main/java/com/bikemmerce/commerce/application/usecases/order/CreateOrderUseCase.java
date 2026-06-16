@@ -20,14 +20,14 @@ public class CreateOrderUseCase {
     private final CartRepositoryPort cartRepositoryPort;
     private final OrderRepositoryPort orderRepositoryPort;
 
-    public Result<Order> execute(String customerId) {
+    public Result<Order> execute(CustomerId customerId) {
         OrderId orderId = new OrderId(UUID.randomUUID().toString());
 
         if (orderRepositoryPort.find(orderId) != null) {
             return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
-        Cart cart = cartRepositoryPort.find(new CustomerId(customerId));
+        Cart cart = cartRepositoryPort.find(customerId);
 
         Order order = new Order(
                 orderId, cart.getCustomerId(), cart.getShoppingItems(), OrderStatus.CREATED,

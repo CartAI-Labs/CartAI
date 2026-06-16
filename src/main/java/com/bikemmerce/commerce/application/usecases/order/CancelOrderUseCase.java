@@ -12,9 +12,7 @@ public class CancelOrderUseCase {
 
     private final OrderRepositoryPort orderRepositoryPort;
 
-    public Result<Order> execute(String id) {
-        OrderId orderId = new OrderId(id);
-
+    public Result<Order> execute(OrderId orderId) {
         Order order = orderRepositoryPort.find(orderId);
 
         if (order != null) {

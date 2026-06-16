@@ -12,8 +12,8 @@ public class GetOrderUseCase {
 
     private final OrderRepositoryPort OrderRepositoryPort;
 
-    public Result<Order> execute(String id) {
-        Order Order = OrderRepositoryPort.find(new OrderId(id));
+    public Result<Order> execute(OrderId orderId) {
+        Order Order = OrderRepositoryPort.find(orderId);
 
         if (Order != null) {
             return Result.success(Order);

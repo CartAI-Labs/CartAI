@@ -37,7 +37,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProduct(@PathVariable String id) {
+    public ResponseEntity<?> getProductById(@PathVariable String id) {
         Result<Product> result = getProductUseCase.execute(id);
 
         if (result.hasError()) {
