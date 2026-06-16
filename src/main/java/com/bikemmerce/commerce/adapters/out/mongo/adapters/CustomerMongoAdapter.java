@@ -39,6 +39,7 @@ public class CustomerMongoAdapter implements CustomerRepositoryPort {
 
     @Override
     public Customer save(Customer customer) {
-        return CustomerMapper.toDomain(customerMongoRepository.save(CustomerMapper.toDocument(customer)));    }
+        return CustomerMapper.toDomain(customerMongoRepository.save(CustomerMapper.toDocument(customer)));
+    }
 
 }

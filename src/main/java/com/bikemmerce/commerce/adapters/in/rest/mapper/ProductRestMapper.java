@@ -13,8 +13,8 @@ public class ProductRestMapper {
         ProductId productId = new ProductId(UUID.randomUUID().toString());
 
         return new Product(
-            productId, productRestRequest.name(), productRestRequest.description(),
-                productRestRequest.price(),productRestRequest.stock());
+                productId, productRestRequest.name(), productRestRequest.description(),
+                productRestRequest.price(), productRestRequest.stock());
     }
 
     public static ProductRestResponse toResponse(Product product) {

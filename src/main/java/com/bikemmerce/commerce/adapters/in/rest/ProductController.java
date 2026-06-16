@@ -62,7 +62,7 @@ public class ProductController {
         Result<List<Product>> result = listProductUseCase.execute();
 
         List<ProductRestResponse> productRestResponses =
-            result.getValue().stream().map(ProductRestMapper::toResponse).toList();
+                result.getValue().stream().map(ProductRestMapper::toResponse).toList();
 
         return ResponseEntity.ok(productRestResponses);
     }

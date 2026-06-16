@@ -21,4 +21,5 @@ public record ProductRestRequest(
         @NotNull(message = "Stock is mandatory")
         @Min(value = 0, message = "Stock could not be negative")
         Integer stock
-) {}
+) {
+}

@@ -8,13 +8,13 @@ public class CartMapper {
 
     public static CartDocument toDocument(Cart cart) {
         return new CartDocument(
-            cart.getCustomerId().value(), cart.getShoppingItems().stream().map(ShoppingItemMapper::toDocument).toList());
+                cart.getCustomerId().value(), cart.getShoppingItems().stream().map(ShoppingItemMapper::toDocument).toList());
     }
 
     public static Cart toDomain(CartDocument cartDocument) {
         return new Cart(
-            new CustomerId(cartDocument.getCustomerId()),
-            cartDocument.getShoppingItems().stream().map(ShoppingItemMapper::toDomain).toList());
+                new CustomerId(cartDocument.getCustomerId()),
+                cartDocument.getShoppingItems().stream().map(ShoppingItemMapper::toDomain).toList());
     }
 
 }

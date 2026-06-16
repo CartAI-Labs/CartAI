@@ -5,11 +5,13 @@ import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
 import com.bikemmerce.commerce.domain.model.value.objects.Email;
 import com.bikemmerce.commerce.domain.ports.CustomerRepositoryPort;
 import com.bikemmerce.commerce.domain.result.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+@RequiredArgsConstructor
 public class GetCustomerUseCase {
 
-    private CustomerRepositoryPort customerRepositoryPort;
+    private final CustomerRepositoryPort customerRepositoryPort;
 
     public Result<Customer> execute(CustomerId customerId, Email email) {
         Customer customer = customerRepositoryPort.findByCustomerId(customerId);

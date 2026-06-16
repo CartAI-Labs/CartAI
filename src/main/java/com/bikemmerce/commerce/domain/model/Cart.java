@@ -20,8 +20,8 @@ public class Cart {
         ProductId productId = product.getId();
 
         Optional<ShoppingItem> existingItem = shoppingItems.stream()
-            .filter(item -> productId.equals(item.getProductId()))
-            .findFirst();
+                .filter(item -> productId.equals(item.getProductId()))
+                .findFirst();
 
         if (existingItem.isPresent()) {
             ShoppingItem item = existingItem.get();
@@ -29,13 +29,13 @@ public class Cart {
             item.setCount(item.getCount() + count);
         } else {
             shoppingItems.add(
-                new ShoppingItem(productId, count, product.getPrice()));
+                    new ShoppingItem(productId, count, product.getPrice()));
         }
     }
 
     public void removeItem(ProductId productId) {
         shoppingItems.removeIf(
-            shoppingItem -> productId.equals(shoppingItem.getProductId()));
+                shoppingItem -> productId.equals(shoppingItem.getProductId()));
     }
 
 }

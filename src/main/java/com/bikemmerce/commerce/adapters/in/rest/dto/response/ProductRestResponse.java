@@ -10,4 +10,5 @@ public record ProductRestResponse(
         String description,
         BigDecimal price,
         Integer stock
-) {}
+) {
+}

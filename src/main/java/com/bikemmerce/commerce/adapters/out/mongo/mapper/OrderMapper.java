@@ -9,14 +9,14 @@ public class OrderMapper {
 
     public static OrderDocument toDocument(Order order) {
         return new OrderDocument(
-            order.getOrderId().value(), order.getCustomerId().value(),
-            order.getShoppingItems().stream().map(ShoppingItemMapper::toDocument).toList(),
-            order.getStatus(), order.getCreateDate());
+                order.getOrderId().value(), order.getCustomerId().value(),
+                order.getShoppingItems().stream().map(ShoppingItemMapper::toDocument).toList(),
+                order.getStatus(), order.getCreateDate());
     }
 
     public static Order toDomain(OrderDocument orderDocument) {
         return new Order(
-            new OrderId(orderDocument.getOrderId()), new CustomerId(orderDocument.getCustomerId()),
+                new OrderId(orderDocument.getOrderId()), new CustomerId(orderDocument.getCustomerId()),
                 orderDocument.getShoppingItems().stream().map(ShoppingItemMapper::toDomain).toList(),
                 orderDocument.getOrderStatus(), orderDocument.getCreateDate());
     }

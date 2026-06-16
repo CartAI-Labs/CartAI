@@ -8,15 +8,15 @@ public class ProductMapper {
 
     public static ProductDocument toProductDocument(Product product) {
         return new ProductDocument(
-            product.getId().value(), product.getName(), product.getDescription(),
-            product.getPrice(), product.getStock());
+                product.getId().value(), product.getName(), product.getDescription(),
+                product.getPrice(), product.getStock());
 
     }
 
     public static Product toProduct(ProductDocument productDocument) {
         return new Product(
-            new ProductId(productDocument.getId()), productDocument.getName(),
-            productDocument.getDescription(), productDocument.getPrice(), productDocument.getStock());
+                new ProductId(productDocument.getId()), productDocument.getName(),
+                productDocument.getDescription(), productDocument.getPrice(), productDocument.getStock());
     }
 
 }
