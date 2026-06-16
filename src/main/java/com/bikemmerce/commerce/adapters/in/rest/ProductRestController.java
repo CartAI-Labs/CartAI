@@ -1,8 +1,8 @@
 package com.bikemmerce.commerce.adapters.in.rest;
 
 import com.bikemmerce.commerce.adapters.in.rest.dto.customer.CreateProductRestRequest;
-import com.bikemmerce.commerce.adapters.in.rest.dto.product.UpdateProductRestRequest;
 import com.bikemmerce.commerce.adapters.in.rest.dto.product.ProductRestResponse;
+import com.bikemmerce.commerce.adapters.in.rest.dto.product.UpdateProductRestRequest;
 import com.bikemmerce.commerce.adapters.in.rest.mapper.ProductRestMapper;
 import com.bikemmerce.commerce.application.usecases.product.*;
 import com.bikemmerce.commerce.domain.model.Product;

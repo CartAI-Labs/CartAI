@@ -1,17 +1,13 @@
 package com.bikemmerce.commerce.adapters.in.rest;
 
-import com.bikemmerce.commerce.adapters.in.rest.dto.customer.CreateProductRestRequest;
 import com.bikemmerce.commerce.adapters.in.rest.mapper.OrderRestMapper;
-import com.bikemmerce.commerce.adapters.in.rest.mapper.ProductRestMapper;
 import com.bikemmerce.commerce.application.usecases.order.CancelOrderUseCase;
 import com.bikemmerce.commerce.application.usecases.order.CreateOrderUseCase;
 import com.bikemmerce.commerce.application.usecases.order.GetOrderUseCase;
 import com.bikemmerce.commerce.domain.model.Order;
-import com.bikemmerce.commerce.domain.model.Product;
 import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
 import com.bikemmerce.commerce.domain.model.value.objects.OrderId;
 import com.bikemmerce.commerce.domain.result.Result;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

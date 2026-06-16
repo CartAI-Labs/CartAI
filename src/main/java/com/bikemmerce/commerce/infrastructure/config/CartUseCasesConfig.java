@@ -4,11 +4,7 @@ import com.bikemmerce.commerce.application.usecases.cart.AddShoppingItemToCartUs
 import com.bikemmerce.commerce.application.usecases.cart.ClearCartUseCase;
 import com.bikemmerce.commerce.application.usecases.cart.GetCartUseCase;
 import com.bikemmerce.commerce.application.usecases.cart.RemoveShoppingItemFromCartUseCase;
-import com.bikemmerce.commerce.application.usecases.customer.CreateCustomerUseCase;
-import com.bikemmerce.commerce.application.usecases.customer.GetCustomerUseCase;
-import com.bikemmerce.commerce.application.usecases.customer.UpdateCustomerUseCase;
 import com.bikemmerce.commerce.domain.ports.CartRepositoryPort;
-import com.bikemmerce.commerce.domain.ports.CustomerRepositoryPort;
 import com.bikemmerce.commerce.domain.ports.ProductRepositoryPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

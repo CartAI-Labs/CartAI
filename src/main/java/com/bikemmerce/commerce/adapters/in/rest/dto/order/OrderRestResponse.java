@@ -4,7 +4,6 @@ import com.bikemmerce.commerce.domain.model.ShoppingItem;
 import com.bikemmerce.commerce.domain.model.constants.OrderStatus;
 import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
 import com.bikemmerce.commerce.domain.model.value.objects.OrderId;
-import lombok.NonNull;
 
 import java.util.Date;
 import java.util.List;

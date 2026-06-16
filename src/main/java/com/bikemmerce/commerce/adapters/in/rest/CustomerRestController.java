@@ -1,7 +1,7 @@
 package com.bikemmerce.commerce.adapters.in.rest;
 
-import com.bikemmerce.commerce.adapters.in.rest.dto.product.CreateCustomerRestRequest;
 import com.bikemmerce.commerce.adapters.in.rest.dto.customer.UpdateCustomerRestRequest;
+import com.bikemmerce.commerce.adapters.in.rest.dto.product.CreateCustomerRestRequest;
 import com.bikemmerce.commerce.adapters.in.rest.mapper.CustomerRestMapper;
 import com.bikemmerce.commerce.application.usecases.customer.CreateCustomerUseCase;
 import com.bikemmerce.commerce.application.usecases.customer.GetCustomerUseCase;

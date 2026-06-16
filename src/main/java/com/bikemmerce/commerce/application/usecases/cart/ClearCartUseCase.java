@@ -7,8 +7,6 @@ import com.bikemmerce.commerce.domain.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import java.util.ArrayList;
-
 @RequiredArgsConstructor
 public class ClearCartUseCase {
 

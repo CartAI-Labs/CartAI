@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 public class ShoppingItem {
