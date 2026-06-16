@@ -1,23 +1,22 @@
 package com.bikemmerce.commerce.adapters.in.rest.mapper;
 
-import com.bikemmerce.commerce.adapters.in.rest.dto.request.ProductRestRequest;
-import com.bikemmerce.commerce.adapters.in.rest.dto.response.ProductRestResponse;
+import com.bikemmerce.commerce.adapters.in.rest.dto.customer.CreateProductRestRequest;
+import com.bikemmerce.commerce.adapters.in.rest.dto.product.UpdateProductRestRequest;
+import com.bikemmerce.commerce.adapters.in.rest.dto.product.ProductRestResponse;
 import com.bikemmerce.commerce.application.usecases.commands.CreateProductCommand;
 import com.bikemmerce.commerce.application.usecases.commands.UpdateProductCommand;
 import com.bikemmerce.commerce.domain.model.Product;
 
 public class ProductRestMapper {
 
-    public static CreateProductCommand toCreateProductCommand(ProductRestRequest productRestRequest) {
+    public static CreateProductCommand toCreateProductCommand(CreateProductRestRequest request) {
         return new CreateProductCommand(
-                productRestRequest.name(), productRestRequest.description(),
-                productRestRequest.price(), productRestRequest.stock());
+                request.name(), request.description(), request.price(), request.stock());
     }
 
-    public static UpdateProductCommand toUpdateProductCommand(ProductRestRequest productRestRequest) {
+    public static UpdateProductCommand toUpdateProductCommand(UpdateProductRestRequest request) {
         return new UpdateProductCommand(
-                productRestRequest.id(), productRestRequest.name(), productRestRequest.description(),
-                productRestRequest.price(), productRestRequest.stock());
+                request.id(), request.name(), request.description(), request.price(), request.stock());
     }
 
     public static ProductRestResponse toResponse(Product product) {

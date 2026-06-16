@@ -1,4 +1,4 @@
-package com.bikemmerce.commerce.adapters.in.rest.dto.response;
+package com.bikemmerce.commerce.adapters.in.rest.dto.customer;
 
 public record CustomerRestResponse(
         String id,

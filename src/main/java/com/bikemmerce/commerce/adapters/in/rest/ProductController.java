@@ -1,11 +1,11 @@
 package com.bikemmerce.commerce.adapters.in.rest;
 
-import com.bikemmerce.commerce.adapters.in.rest.dto.request.ProductRestRequest;
-import com.bikemmerce.commerce.adapters.in.rest.dto.response.ProductRestResponse;
+import com.bikemmerce.commerce.adapters.in.rest.dto.customer.CreateProductRestRequest;
+import com.bikemmerce.commerce.adapters.in.rest.dto.product.UpdateProductRestRequest;
+import com.bikemmerce.commerce.adapters.in.rest.dto.product.ProductRestResponse;
 import com.bikemmerce.commerce.adapters.in.rest.mapper.ProductRestMapper;
 import com.bikemmerce.commerce.application.usecases.product.*;
 import com.bikemmerce.commerce.domain.model.Product;
-import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
 import com.bikemmerce.commerce.domain.result.Result;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,8 @@ public class ProductController {
     private final UpdateProductUseCase updateProductUseCase;
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody @Valid ProductRestRequest productRestRequest) {
-        Result<Product> result = createProductUseCase.execute(ProductRestMapper.toCreateProductCommand(productRestRequest));
+    public ResponseEntity<?> createProduct(@RequestBody @Valid CreateProductRestRequest request) {
+        Result<Product> result = createProductUseCase.execute(ProductRestMapper.toCreateProductCommand(request));
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Error.");
@@ -69,8 +69,8 @@ public class ProductController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> putProduct(@RequestBody @Valid ProductRestRequest productRestRequest) {
-        Result<Product> result = updateProductUseCase.execute(ProductRestMapper.toUpdateProductCommand(productRestRequest));
+    public ResponseEntity<?> putProduct(@RequestBody @Valid UpdateProductRestRequest request) {
+        Result<Product> result = updateProductUseCase.execute(ProductRestMapper.toUpdateProductCommand(request));
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Error.");

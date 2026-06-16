@@ -1,4 +1,4 @@
-package com.bikemmerce.commerce.adapters.in.rest.dto.response;
+package com.bikemmerce.commerce.adapters.in.rest.dto.product;
 
 import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
 

@@ -1,8 +1,8 @@
-package com.bikemmerce.commerce.adapters.in.rest.dto.request;
+package com.bikemmerce.commerce.adapters.in.rest.dto.product;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CustomerRestRequest(
+public record CreateCustomerRestRequest(
         @NotBlank(message = "Name is mandatory")
         String name,
 
