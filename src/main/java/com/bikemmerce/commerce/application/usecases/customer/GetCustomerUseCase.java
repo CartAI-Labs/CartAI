@@ -13,11 +13,11 @@ public class GetCustomerUseCase {
 
     private final CustomerRepositoryPort customerRepositoryPort;
 
-    public Result<Customer> execute(CustomerId customerId, Email email) {
-        Customer customer = customerRepositoryPort.findByCustomerId(customerId);
+    public Result<Customer> execute(String id, String email) {
+        Customer customer = customerRepositoryPort.findByCustomerId(new CustomerId(id));
 
         if (customer == null) {
-            customer = customerRepositoryPort.findByEmail(email);
+            customer = customerRepositoryPort.findByEmail(new Email(email));
         }
 
         if (customer != null) {

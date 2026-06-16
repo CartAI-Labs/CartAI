@@ -4,14 +4,16 @@ import com.bikemmerce.commerce.domain.model.Order;
 import com.bikemmerce.commerce.domain.model.value.objects.OrderId;
 import com.bikemmerce.commerce.domain.ports.OrderRepositoryPort;
 import com.bikemmerce.commerce.domain.result.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+@RequiredArgsConstructor
 public class GetOrderUseCase {
 
-    private OrderRepositoryPort OrderRepositoryPort;
+    private final OrderRepositoryPort OrderRepositoryPort;
 
-    public Result<Order> execute(OrderId OrderId) {
-        Order Order = OrderRepositoryPort.find(OrderId);
+    public Result<Order> execute(String id) {
+        Order Order = OrderRepositoryPort.find(new OrderId(id));
 
         if (Order != null) {
             return Result.success(Order);

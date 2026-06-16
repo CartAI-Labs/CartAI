@@ -7,26 +7,28 @@ import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
 import com.bikemmerce.commerce.domain.ports.CartRepositoryPort;
 import com.bikemmerce.commerce.domain.ports.ProductRepositoryPort;
 import com.bikemmerce.commerce.domain.result.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 
+@RequiredArgsConstructor
 public class AddShoppingItemToCartUseCase {
 
-    private CartRepositoryPort cartRepositoryPort;
-    private ProductRepositoryPort productRepositoryPort;
+    private final CartRepositoryPort cartRepositoryPort;
+    private final ProductRepositoryPort productRepositoryPort;
 
-    public Result<Cart> execute(CustomerId customerId, ProductId productId) {
+    public Result<Cart> execute(String id, ProductId productId) {
         Product product = productRepositoryPort.find(productId);
 
         if (product == null) {
             return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
-        Cart cart = cartRepositoryPort.find(customerId);
+        Cart cart = cartRepositoryPort.find(new CustomerId(id));
 
         if (cart == null) {
-            cart = new Cart(customerId, new ArrayList<>());
+            cart = new Cart(new CustomerId(id), new ArrayList<>());
         }
 
         cart.addItem(product, 1);

@@ -16,6 +16,11 @@ public class Cart {
     @NonNull
     private List<ShoppingItem> shoppingItems;
 
+    public Cart(@NonNull CustomerId customerId, @NonNull List<ShoppingItem> shoppingItems) {
+        this.customerId = customerId;
+        this.shoppingItems = shoppingItems;
+    }
+
     public void addItem(Product product, Integer count) {
         ProductId productId = product.getId();
 
@@ -36,6 +41,10 @@ public class Cart {
     public void removeItem(ProductId productId) {
         shoppingItems.removeIf(
                 shoppingItem -> productId.equals(shoppingItem.getProductId()));
+    }
+
+    public void clearItems() {
+        shoppingItems.clear();
     }
 
 }

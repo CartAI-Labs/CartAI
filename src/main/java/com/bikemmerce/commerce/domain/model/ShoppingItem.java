@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 public class ShoppingItem {
@@ -16,4 +17,9 @@ public class ShoppingItem {
     @NonNull
     private BigDecimal unitPrice;
 
+    public ShoppingItem(@NonNull ProductId productId, @NonNull Integer count, @NonNull BigDecimal unitPrice) {
+        this.productId = productId;
+        this.count = count;
+        this.unitPrice = unitPrice;
+    }
 }

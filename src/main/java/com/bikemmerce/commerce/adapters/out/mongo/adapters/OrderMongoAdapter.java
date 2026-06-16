@@ -23,7 +23,7 @@ public class OrderMongoAdapter implements OrderRepositoryPort {
 
     @Override
     public Order find(OrderId orderId) {
-        return orderMongoRepository.findById(orderId.value()).map(OrderMapper::toDomain).orElseThrow();
+        return orderMongoRepository.findById(orderId.value()).map(OrderMapper::toDomain).orElse(null);
     }
 
     @Override

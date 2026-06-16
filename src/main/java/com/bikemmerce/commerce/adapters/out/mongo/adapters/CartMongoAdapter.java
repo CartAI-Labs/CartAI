@@ -16,7 +16,6 @@ public class CartMongoAdapter implements CartRepositoryPort {
 
     private final CartMongoRepository cartMongoRepository;
 
-
     @Override
     public void delete(CustomerId customerId) {
         cartMongoRepository.deleteById(customerId.value());

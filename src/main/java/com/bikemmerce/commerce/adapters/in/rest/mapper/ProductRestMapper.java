@@ -2,18 +2,21 @@ package com.bikemmerce.commerce.adapters.in.rest.mapper;
 
 import com.bikemmerce.commerce.adapters.in.rest.dto.request.ProductRestRequest;
 import com.bikemmerce.commerce.adapters.in.rest.dto.response.ProductRestResponse;
+import com.bikemmerce.commerce.application.usecases.commands.CreateProductCommand;
+import com.bikemmerce.commerce.application.usecases.commands.UpdateProductCommand;
 import com.bikemmerce.commerce.domain.model.Product;
-import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
-
-import java.util.UUID;
 
 public class ProductRestMapper {
 
-    public static Product toDomain(ProductRestRequest productRestRequest) {
-        ProductId productId = new ProductId(UUID.randomUUID().toString());
+    public static CreateProductCommand toCreateProductCommand(ProductRestRequest productRestRequest) {
+        return new CreateProductCommand(
+                productRestRequest.name(), productRestRequest.description(),
+                productRestRequest.price(), productRestRequest.stock());
+    }
 
-        return new Product(
-                productId, productRestRequest.name(), productRestRequest.description(),
+    public static UpdateProductCommand toUpdateProductCommand(ProductRestRequest productRestRequest) {
+        return new UpdateProductCommand(
+                productRestRequest.id(), productRestRequest.name(), productRestRequest.description(),
                 productRestRequest.price(), productRestRequest.stock());
     }
 

@@ -24,12 +24,12 @@ public class CustomerMongoAdapter implements CustomerRepositoryPort {
 
     @Override
     public Customer findByCustomerId(CustomerId customerId) {
-        return customerMongoRepository.findById(customerId.value()).map(CustomerMapper::toDomain).orElseThrow();
+        return customerMongoRepository.findById(customerId.value()).map(CustomerMapper::toDomain).orElse(null);
     }
 
     @Override
     public Customer findByEmail(Email email) {
-        return customerMongoRepository.findByEmail(email).map(CustomerMapper::toDomain).orElseThrow();
+        return customerMongoRepository.findByEmail(email).map(CustomerMapper::toDomain).orElse(null);
     }
 
     @Override

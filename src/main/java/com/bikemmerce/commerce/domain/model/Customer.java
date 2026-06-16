@@ -15,4 +15,9 @@ public class Customer {
     @NonNull
     private Email email;
 
+    public Customer(@NonNull CustomerId customerId, @NonNull String name, @NonNull Email email) {
+        this.customerId = customerId;
+        this.name = name;
+        this.email = email;
+    }
 }

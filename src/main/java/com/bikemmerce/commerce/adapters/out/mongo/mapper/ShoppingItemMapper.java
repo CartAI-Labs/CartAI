@@ -13,7 +13,8 @@ public class ShoppingItemMapper {
 
     public static ShoppingItem toDomain(ShoppingItemDocument shoppingItemDocument) {
         return new ShoppingItem(
-                new ProductId(shoppingItemDocument.id()), shoppingItemDocument.count(), shoppingItemDocument.unitPrice());
+                new ProductId(shoppingItemDocument.id()), shoppingItemDocument.count(),
+                shoppingItemDocument.unitPrice());
     }
 
 }

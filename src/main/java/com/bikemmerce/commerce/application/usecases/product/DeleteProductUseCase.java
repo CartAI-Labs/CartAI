@@ -12,7 +12,9 @@ public class DeleteProductUseCase {
 
     private final ProductRepositoryPort productRepositoryPort;
 
-    public Result<Product> execute(ProductId productId) {
+    public Result<Product> execute(String id) {
+        ProductId productId = new ProductId(id);
+
         Product product = productRepositoryPort.find(productId);
 
         if (product == null) {

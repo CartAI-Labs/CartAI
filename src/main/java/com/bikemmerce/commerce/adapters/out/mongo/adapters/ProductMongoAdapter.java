@@ -23,7 +23,7 @@ public class ProductMongoAdapter implements ProductRepositoryPort {
 
     @Override
     public Product find(ProductId productId) {
-        return productMongoRepository.findById(productId.value()).map(ProductMapper::toProduct).orElseThrow();
+        return productMongoRepository.findById(productId.value()).map(ProductMapper::toProduct).orElse(null);
     }
 
     @Override

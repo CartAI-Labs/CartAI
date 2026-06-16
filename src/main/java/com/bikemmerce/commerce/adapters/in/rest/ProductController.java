@@ -7,6 +7,7 @@ import com.bikemmerce.commerce.application.usecases.product.*;
 import com.bikemmerce.commerce.domain.model.Product;
 import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
 import com.bikemmerce.commerce.domain.result.Result;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class ProductController {
     private final UpdateProductUseCase updateProductUseCase;
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody ProductRestRequest productRestRequest) {
-        Result<Product> result = createProductUseCase.execute(ProductRestMapper.toDomain(productRestRequest));
+    public ResponseEntity<?> createProduct(@RequestBody @Valid ProductRestRequest productRestRequest) {
+        Result<Product> result = createProductUseCase.execute(ProductRestMapper.toCreateProductCommand(productRestRequest));
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Error.");
@@ -37,7 +38,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProduct(@PathVariable String id) {
-        Result<Product> result = getProductUseCase.execute(new ProductId(id));
+        Result<Product> result = getProductUseCase.execute(id);
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Not found.");
@@ -48,7 +49,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
-        Result<Product> result = deleteProductUseCase.execute(new ProductId(id));
+        Result<Product> result = deleteProductUseCase.execute(id);
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Could not delete");
@@ -68,8 +69,8 @@ public class ProductController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> putProduct(@RequestBody ProductRestRequest productRestRequest) {
-        Result<Product> result = updateProductUseCase.execute(ProductRestMapper.toDomain(productRestRequest));
+    public ResponseEntity<?> putProduct(@RequestBody @Valid ProductRestRequest productRestRequest) {
+        Result<Product> result = updateProductUseCase.execute(ProductRestMapper.toUpdateProductCommand(productRestRequest));
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Error.");

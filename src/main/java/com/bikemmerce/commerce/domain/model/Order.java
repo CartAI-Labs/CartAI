@@ -9,6 +9,7 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class Order {
@@ -23,6 +24,14 @@ public class Order {
     private OrderStatus status;
     @NonNull
     private Date createDate;
+
+    public Order(@NonNull OrderId orderId, @NonNull CustomerId customerId, @NonNull List<ShoppingItem> shoppingItems, @NonNull OrderStatus status, @NonNull Date createDate) {
+        this.orderId = orderId;
+        this.customerId = customerId;
+        this.shoppingItems = shoppingItems;
+        this.status = status;
+        this.createDate = createDate;
+    }
 
     public void cancel() {
         status = OrderStatus.CANCELLED;

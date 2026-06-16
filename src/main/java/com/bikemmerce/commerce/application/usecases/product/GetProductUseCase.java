@@ -12,8 +12,8 @@ public class GetProductUseCase {
 
     private final ProductRepositoryPort productRepositoryPort;
 
-    public Result<Product> execute(ProductId productId) {
-        Product product = productRepositoryPort.find(productId);
+    public Result<Product> execute(String id) {
+        Product product = productRepositoryPort.find(new ProductId(id));
 
         if (product != null) {
             return Result.success(product);

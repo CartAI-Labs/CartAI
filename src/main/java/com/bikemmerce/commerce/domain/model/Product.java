@@ -20,6 +20,14 @@ public class Product {
     @NonNull
     private Integer stock;
 
+    public Product(@NonNull ProductId id, @NonNull String name, @NonNull String description, @NonNull BigDecimal price, @NonNull Integer stock) {
+        this.id = id;
+        this.description = description;
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+    }
+
     public void increaseStock(Integer count) {
         this.stock += count;
     }

@@ -1,4 +1,4 @@
-package com.bikemmerce.commerce.adapters.in.rest.dto.request;
+package com.bikemmerce.commerce.application.usecases.commands;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -7,8 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record ProductRestRequest(
-        String id,
+public record CreateProductCommand(
 
         @NotBlank(message = "Name is mandatory")
         String name,

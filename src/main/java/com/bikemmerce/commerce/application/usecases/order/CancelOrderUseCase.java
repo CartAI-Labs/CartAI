@@ -4,13 +4,17 @@ import com.bikemmerce.commerce.domain.model.Order;
 import com.bikemmerce.commerce.domain.model.value.objects.OrderId;
 import com.bikemmerce.commerce.domain.ports.OrderRepositoryPort;
 import com.bikemmerce.commerce.domain.result.Result;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+@RequiredArgsConstructor
 public class CancelOrderUseCase {
 
-    private OrderRepositoryPort orderRepositoryPort;
+    private final OrderRepositoryPort orderRepositoryPort;
 
-    public Result<Order> execute(OrderId orderId) {
+    public Result<Order> execute(String id) {
+        OrderId orderId = new OrderId(id);
+
         Order order = orderRepositoryPort.find(orderId);
 
         if (order != null) {
