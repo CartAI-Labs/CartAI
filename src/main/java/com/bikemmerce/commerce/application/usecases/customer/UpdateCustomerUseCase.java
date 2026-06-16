@@ -18,9 +18,7 @@ public class UpdateCustomerUseCase {
         CustomerId customerId = new CustomerId(command.id());
         Email email = new Email(command.email());
 
-        if (customerRepositoryPort.findByCustomerId(customerId) != null ||
-                customerRepositoryPort.findByEmail(email) != null) {
-
+        if (customerRepositoryPort.findByEmail(email) != null) {
             return Result.error(HttpStatus.CONFLICT.value());
         }
 

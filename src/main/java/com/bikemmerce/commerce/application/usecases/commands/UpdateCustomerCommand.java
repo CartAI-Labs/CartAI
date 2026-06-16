@@ -11,4 +11,5 @@ public record UpdateCustomerCommand(
 
         @NotBlank(message = "Email is mandatory")
         String email
-) { }
+) {
+}

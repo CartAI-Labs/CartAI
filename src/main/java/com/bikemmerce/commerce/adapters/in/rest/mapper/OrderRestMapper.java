@@ -7,6 +7,7 @@ public class OrderRestMapper {
 
     public static OrderRestResponse toResponse(Order order) {
         return new OrderRestResponse(
-                order.getOrderId(), order.getCustomerId(), order.getShoppingItems(), order.getStatus(), order.getCreateDate());
+                order.getOrderId().value(), order.getCustomerId().value(), order.getShoppingItems(),
+                order.getStatus().getValue(), order.getCreateDate());
     }
 }

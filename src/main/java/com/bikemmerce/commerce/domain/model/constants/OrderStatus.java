@@ -1,11 +1,19 @@
 package com.bikemmerce.commerce.domain.model.constants;
 
 public enum OrderStatus {
+    CREATED("created"),
+    CONFIRMED("confirmed"),
+    SHIPPED("shipped"),
+    DELIVERED("delivered"),
+    CANCELLED("canceled");
 
-    CREATED,
-    CONFIRMED,
-    SHIPPED,
-    DELIVERED,
-    CANCELLED
+    private String value;
 
+    OrderStatus(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

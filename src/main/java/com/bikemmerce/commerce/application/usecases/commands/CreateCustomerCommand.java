@@ -8,4 +8,5 @@ public record CreateCustomerCommand(
 
         @NotBlank(message = "Email is mandatory")
         String email
-) { }
+) {
+}

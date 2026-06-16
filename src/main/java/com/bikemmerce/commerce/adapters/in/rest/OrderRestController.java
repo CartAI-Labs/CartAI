@@ -23,7 +23,7 @@ public class OrderRestController {
 
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> createProduct(@PathVariable String id) {
+    public ResponseEntity<?> createOrder(@PathVariable String id) {
         Result<Order> result = createOrderUseCase.execute(new CustomerId(id));
 
         if (result.hasError()) {
@@ -45,7 +45,7 @@ public class OrderRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> cancel(@PathVariable String id) {
+    public ResponseEntity<?> cancelOrder(@PathVariable String id) {
         Result<Order> result = cancelOrderUseCase.execute(new OrderId(id));
 
         if (result.hasError()) {

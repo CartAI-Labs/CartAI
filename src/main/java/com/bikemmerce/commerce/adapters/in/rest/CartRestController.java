@@ -9,6 +9,7 @@ import com.bikemmerce.commerce.application.usecases.cart.GetCartUseCase;
 import com.bikemmerce.commerce.application.usecases.cart.RemoveShoppingItemFromCartUseCase;
 import com.bikemmerce.commerce.domain.model.Cart;
 import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
+import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
 import com.bikemmerce.commerce.domain.result.Result;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,8 @@ public class CartRestController {
 
     @PatchMapping("/add")
     public ResponseEntity<?> addShoppingItemToCart(@RequestBody @Valid AddShoppingItemToCartRestRequest request) {
-        Result<Cart> result = addShoppingItemToCartUseCase.execute(request.customerId(), request.productId());
+        Result<Cart> result = addShoppingItemToCartUseCase.execute(
+                new CustomerId(request.customerId()), new ProductId(request.productId()));
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Error.");
@@ -38,7 +40,8 @@ public class CartRestController {
 
     @PatchMapping("/remove")
     public ResponseEntity<?> removeItemFromCart(@RequestBody @Valid RemoveShoppingItemToCartRestRequest request) {
-        Result<Cart> result = removeShoppingItemFromCartUseCase.execute(request.customerId(), request.productId());
+        Result<Cart> result = removeShoppingItemFromCartUseCase.execute(
+                new CustomerId(request.customerId()), new ProductId(request.productId()));
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Error.");
@@ -59,7 +62,7 @@ public class CartRestController {
     }
 
     @PatchMapping("/clear/{id}")
-    public ResponseEntity<?> deleteCart(@PathVariable String id) {
+    public ResponseEntity<?> clearCart(@PathVariable String id) {
         Result<Cart> result = clearCartUseCase.execute(new CustomerId(id));
 
         if (result.hasError()) {
@@ -68,8 +71,6 @@ public class CartRestController {
 
         return ResponseEntity.ok(CartRestMapper.toResponse(result.getValue()));
     }
-
-
 
 
 }

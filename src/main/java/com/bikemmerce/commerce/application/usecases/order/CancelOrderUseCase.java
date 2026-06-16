@@ -16,9 +16,9 @@ public class CancelOrderUseCase {
         Order order = orderRepositoryPort.find(orderId);
 
         if (order != null) {
-            orderRepositoryPort.delete(orderId);
+            order.cancel();
 
-            return Result.success(order);
+            return Result.success(orderRepositoryPort.save(order));
         }
 
         return Result.error(HttpStatus.NOT_FOUND.value());
