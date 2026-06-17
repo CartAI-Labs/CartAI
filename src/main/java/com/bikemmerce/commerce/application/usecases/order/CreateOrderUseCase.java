@@ -6,9 +6,11 @@ import com.bikemmerce.commerce.domain.model.Order;
 import com.bikemmerce.commerce.domain.model.constants.OrderStatus;
 import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
 import com.bikemmerce.commerce.domain.model.value.objects.OrderId;
+import com.bikemmerce.commerce.domain.model.value.objects.OrderPlacedEvent;
 import com.bikemmerce.commerce.domain.ports.CartRepositoryPort;
 import com.bikemmerce.commerce.domain.ports.IncrementIdGeneratorPort;
 import com.bikemmerce.commerce.domain.ports.OrderRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.events.OrderPlacedEventPublisherPort;
 import com.bikemmerce.commerce.domain.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ public class CreateOrderUseCase {
     private final CartRepositoryPort cartRepositoryPort;
     private final OrderRepositoryPort orderRepositoryPort;
     private final IncrementIdGeneratorPort incrementIdGeneratorPort;
+    private final OrderPlacedEventPublisherPort orderPlacedEventPublisherPort;
 
     public Result<Order> execute(CustomerId customerId) {
         OrderId orderId = new OrderId(
@@ -34,14 +37,11 @@ public class CreateOrderUseCase {
         Cart cart = cartRepositoryPort.find(customerId);
 
         Order order = new Order(
-                orderId, cart.getCustomerId(), cart.getShoppingItems(), OrderStatus.CREATED,
-                new Date());
+                orderId, cart.getCustomerId(), cart.getShoppingItems(), OrderStatus.CREATED, new Date());
 
-        //TOD0 - borrar en otro hilo, vaciar el cart, por ahora lo hago sincrono
 
-        cart.clearItems();
-
-        cartRepositoryPort.save(cart);
+        orderPlacedEventPublisherPort.publish(
+                new OrderPlacedEvent(orderId, order.getCustomerId(), order.getTotalPrice(), order.getStatus(), order.getCreateDate()));
 
         return Result.success(orderRepositoryPort.save(order));
     }
