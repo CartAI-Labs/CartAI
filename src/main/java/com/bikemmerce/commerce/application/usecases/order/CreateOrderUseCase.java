@@ -1,5 +1,6 @@
 package com.bikemmerce.commerce.application.usecases.order;
 
+import com.bikemmerce.commerce.application.annotations.UseCase;
 import com.bikemmerce.commerce.domain.model.Cart;
 import com.bikemmerce.commerce.domain.model.Order;
 import com.bikemmerce.commerce.domain.model.constants.OrderStatus;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import java.util.Date;
 
 @RequiredArgsConstructor
+@UseCase
 public class CreateOrderUseCase {
 
     private final CartRepositoryPort cartRepositoryPort;

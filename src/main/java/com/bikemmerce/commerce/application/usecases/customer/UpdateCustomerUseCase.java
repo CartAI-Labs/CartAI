@@ -1,5 +1,6 @@
 package com.bikemmerce.commerce.application.usecases.customer;
 
+import com.bikemmerce.commerce.application.annotations.UseCase;
 import com.bikemmerce.commerce.application.usecases.commands.UpdateCustomerCommand;
 import com.bikemmerce.commerce.domain.model.Customer;
 import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
+@UseCase
+
 public class UpdateCustomerUseCase {
 
     private final CustomerRepositoryPort customerRepositoryPort;

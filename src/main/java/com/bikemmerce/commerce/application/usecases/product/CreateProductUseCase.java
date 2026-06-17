@@ -1,5 +1,6 @@
 package com.bikemmerce.commerce.application.usecases.product;
 
+import com.bikemmerce.commerce.application.annotations.UseCase;
 import com.bikemmerce.commerce.application.usecases.commands.CreateProductCommand;
 import com.bikemmerce.commerce.domain.model.Product;
 import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
+@UseCase
 public class CreateProductUseCase {
 
     private final ProductRepositoryPort productRepositoryPort;

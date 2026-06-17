@@ -1,5 +1,6 @@
 package com.bikemmerce.commerce.application.usecases.customer;
 
+import com.bikemmerce.commerce.application.annotations.UseCase;
 import com.bikemmerce.commerce.domain.model.Customer;
 import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
 import com.bikemmerce.commerce.domain.model.value.objects.Email;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
+@UseCase
 public class GetCustomerUseCase {
 
     private final CustomerRepositoryPort customerRepositoryPort;

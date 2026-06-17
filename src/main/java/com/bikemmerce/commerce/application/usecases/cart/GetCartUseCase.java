@@ -1,5 +1,6 @@
 package com.bikemmerce.commerce.application.usecases.cart;
 
+import com.bikemmerce.commerce.application.annotations.UseCase;
 import com.bikemmerce.commerce.domain.model.Cart;
 import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
 import com.bikemmerce.commerce.domain.ports.CartRepositoryPort;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
+@UseCase
 public class GetCartUseCase {
 
     private final CartRepositoryPort cartRepositoryPort;

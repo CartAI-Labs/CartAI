@@ -1,5 +1,6 @@
 package com.bikemmerce.commerce.application.usecases.order;
 
+import com.bikemmerce.commerce.application.annotations.UseCase;
 import com.bikemmerce.commerce.domain.model.Order;
 import com.bikemmerce.commerce.domain.model.value.objects.OrderId;
 import com.bikemmerce.commerce.domain.ports.OrderRepositoryPort;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
+@UseCase
 public class GetOrderUseCase {
 
     private final OrderRepositoryPort OrderRepositoryPort;
