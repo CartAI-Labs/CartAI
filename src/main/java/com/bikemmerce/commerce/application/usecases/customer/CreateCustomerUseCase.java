@@ -5,24 +5,24 @@ import com.bikemmerce.commerce.domain.model.Customer;
 import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
 import com.bikemmerce.commerce.domain.model.value.objects.Email;
 import com.bikemmerce.commerce.domain.ports.CustomerRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.IncrementIdGeneratorPort;
 import com.bikemmerce.commerce.domain.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class CreateCustomerUseCase {
 
     private final CustomerRepositoryPort customerRepositoryPort;
+    private final IncrementIdGeneratorPort incrementIdGeneratorPort;
 
     public Result<Customer> execute(CreateCustomerCommand command) {
-        CustomerId customerId = new CustomerId(UUID.randomUUID().toString());
+        CustomerId customerId = new CustomerId(
+                incrementIdGeneratorPort.increment(Customer.class).toString());
+
         Email email = new Email(command.email());
 
-        if (customerRepositoryPort.findByCustomerId(customerId) != null ||
-                customerRepositoryPort.findByEmail(email) != null) {
-
+        if (customerRepositoryPort.findByEmail(email) != null) {
             return Result.error(HttpStatus.CONFLICT.value());
         }
 
