@@ -1,4 +1,4 @@
-package com.bikemmerce.commerce.infrastructure.config.beans;
+package com.bikemmerce.commerce.infrastructure.config.usecases;
 
 import com.bikemmerce.commerce.application.annotations.UseCase;
 import org.springframework.context.annotation.ComponentScan;
