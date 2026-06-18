@@ -14,6 +14,7 @@ public class OutboxTransactionDocument {
     public static final int PENDING = 0;
     public static final int SUCCESS = 1;
     public static final int FAIL = 2;
+    public static final int PROCESSING = 3;
     @Id
     private final String id;
     private String aggregateType;
