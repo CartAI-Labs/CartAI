@@ -1,0 +1,18 @@
+# Dependencias & gestores de paquetes
+node_modules/
+.pnpm-store/
+vendor/
+.gradle/
+gradle/
+
+# Build outputs
+dist/
+build/
+.next/
+.idea/
+out/
+
+# Archivos de bloqueo (grandes, rara vez útiles para la IA)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
