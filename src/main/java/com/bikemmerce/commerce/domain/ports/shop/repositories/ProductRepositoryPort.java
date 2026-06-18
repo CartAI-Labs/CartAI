@@ -1,4 +1,4 @@
-package com.bikemmerce.commerce.domain.ports.shop;
+package com.bikemmerce.commerce.domain.ports.shop.repositories;
 
 import com.bikemmerce.commerce.domain.model.shop.Product;
 import com.bikemmerce.commerce.domain.model.shop.value.objects.ProductId;

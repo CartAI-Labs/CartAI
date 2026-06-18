@@ -3,7 +3,7 @@ package com.bikemmerce.commerce.application.usecases.security.role;
 import com.bikemmerce.commerce.application.annotations.UseCase;
 import com.bikemmerce.commerce.domain.model.security.Role;
 import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
-import com.bikemmerce.commerce.domain.ports.security.RoleRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.security.repositories.RoleRepositoryPort;
 import com.bikemmerce.commerce.domain.result.Result;
 import lombok.RequiredArgsConstructor;
 

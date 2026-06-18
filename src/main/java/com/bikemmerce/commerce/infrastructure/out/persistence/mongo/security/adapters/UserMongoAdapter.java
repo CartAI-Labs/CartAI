@@ -5,7 +5,7 @@ import com.bikemmerce.commerce.domain.model.security.User;
 import com.bikemmerce.commerce.domain.model.security.value.objects.Email;
 import com.bikemmerce.commerce.domain.model.security.value.objects.RoleId;
 import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
-import com.bikemmerce.commerce.domain.ports.security.UserRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.security.repositories.UserRepositoryPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.security.UserMongoRepository;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.security.documents.UserDocument;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.security.mapper.UserMapper;

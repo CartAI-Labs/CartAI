@@ -1,4 +1,4 @@
-package com.bikemmerce.commerce.domain.ports.security;
+package com.bikemmerce.commerce.domain.ports.security.services;
 
 public interface PasswordEncoderPort {
 

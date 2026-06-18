@@ -3,7 +3,7 @@ package com.bikemmerce.commerce.application.usecases.shop.order;
 import com.bikemmerce.commerce.application.annotations.UseCase;
 import com.bikemmerce.commerce.domain.model.shop.Order;
 import com.bikemmerce.commerce.domain.model.shop.value.objects.OrderId;
-import com.bikemmerce.commerce.domain.ports.shop.OrderRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.shop.repositories.OrderRepositoryPort;
 import com.bikemmerce.commerce.domain.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

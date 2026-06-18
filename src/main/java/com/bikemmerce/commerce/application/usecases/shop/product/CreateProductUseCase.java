@@ -5,7 +5,7 @@ import com.bikemmerce.commerce.application.usecases.shop.commands.CreateProductC
 import com.bikemmerce.commerce.domain.model.shop.Product;
 import com.bikemmerce.commerce.domain.model.shop.value.objects.ProductId;
 import com.bikemmerce.commerce.domain.ports.common.IncrementIdGeneratorPort;
-import com.bikemmerce.commerce.domain.ports.shop.ProductRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.shop.repositories.ProductRepositoryPort;
 import com.bikemmerce.commerce.domain.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

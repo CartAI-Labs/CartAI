@@ -6,7 +6,7 @@ import com.bikemmerce.commerce.domain.model.security.Role;
 import com.bikemmerce.commerce.domain.model.security.value.objects.Permission;
 import com.bikemmerce.commerce.domain.model.security.value.objects.RoleId;
 import com.bikemmerce.commerce.domain.ports.common.IncrementIdGeneratorPort;
-import com.bikemmerce.commerce.domain.ports.security.RoleRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.security.repositories.RoleRepositoryPort;
 import com.bikemmerce.commerce.domain.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

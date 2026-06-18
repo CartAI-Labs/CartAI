@@ -3,7 +3,7 @@ package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.security.ad
 import com.bikemmerce.commerce.domain.model.security.Role;
 import com.bikemmerce.commerce.domain.model.security.value.objects.RoleId;
 import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
-import com.bikemmerce.commerce.domain.ports.security.RoleRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.security.repositories.RoleRepositoryPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.security.RoleMongoRepository;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.security.mapper.RoleMapper;
 import lombok.RequiredArgsConstructor;

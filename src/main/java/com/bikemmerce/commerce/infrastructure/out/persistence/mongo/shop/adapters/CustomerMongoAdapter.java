@@ -3,7 +3,7 @@ package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.shop.adapte
 import com.bikemmerce.commerce.domain.model.security.value.objects.Email;
 import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
 import com.bikemmerce.commerce.domain.model.shop.Customer;
-import com.bikemmerce.commerce.domain.ports.shop.CustomerRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.shop.repositories.CustomerRepositoryPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.shop.CustomerMongoRepository;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.shop.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;

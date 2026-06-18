@@ -2,7 +2,7 @@ package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.shop.adapte
 
 import com.bikemmerce.commerce.domain.model.shop.Order;
 import com.bikemmerce.commerce.domain.model.shop.value.objects.OrderId;
-import com.bikemmerce.commerce.domain.ports.shop.OrderRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.shop.repositories.OrderRepositoryPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.shop.OrderMongoRepository;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.shop.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;

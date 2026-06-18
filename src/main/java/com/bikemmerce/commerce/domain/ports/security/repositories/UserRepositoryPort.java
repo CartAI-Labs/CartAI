@@ -1,4 +1,4 @@
-package com.bikemmerce.commerce.domain.ports.security;
+package com.bikemmerce.commerce.domain.ports.security.repositories;
 
 import com.bikemmerce.commerce.domain.model.security.User;
 import com.bikemmerce.commerce.domain.model.security.value.objects.Email;
