@@ -1,4 +1,4 @@
-bikecommerce:
+cartai:
   database:
     counters:
       offset: 999
