@@ -1,6 +1,6 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.shop.adapters.events;
 
-import com.bikemmerce.commerce.domain.model.shop.Order;
+import com.bikemmerce.commerce.domain.model.shop.Customer;
 import com.bikemmerce.commerce.domain.model.shop.value.objects.CustomerAddedEvent;
 import com.bikemmerce.commerce.domain.ports.shop.events.CustomerAddedEventPublisherPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.common.documents.OutboxTransactionDocument;
@@ -25,7 +25,7 @@ public class CustomerAddedEventPublisherOutboxTransactionAdapter implements Cust
     public void added(CustomerAddedEvent event) {
         try {
             OutboxTransactionDocument outboxTransactionDocument = OutboxTransactionDocument.builder()
-                    .aggregateType(Order.class.getSimpleName().toLowerCase())
+                    .aggregateType(Customer.class.getSimpleName().toLowerCase())
                     .aggregateId(event.userId().value())
                     .key(event.userId().value())
                     .topic(TOPIC)
