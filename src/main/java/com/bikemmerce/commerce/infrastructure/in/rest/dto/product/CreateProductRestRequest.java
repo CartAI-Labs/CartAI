@@ -4,10 +4,7 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-public record UpdateProductRestRequest(
-        @NotBlank(message = "Id is mandatory")
-        String id,
-
+public record CreateProductRestRequest(
         @NotBlank(message = "Name is mandatory")
         String name,
 

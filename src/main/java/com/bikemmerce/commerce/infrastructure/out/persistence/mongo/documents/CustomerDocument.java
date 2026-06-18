@@ -1,6 +1,7 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.documents;
 
-import com.bikemmerce.commerce.domain.model.value.objects.Email;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,8 +12,7 @@ public class CustomerDocument {
 
     @Id
     private final String id;
-
     private final String name;
-    private final Email email;
+    private final String email;
 
 }

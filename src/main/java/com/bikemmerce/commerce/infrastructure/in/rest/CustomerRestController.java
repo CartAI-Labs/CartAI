@@ -6,7 +6,7 @@ import com.bikemmerce.commerce.application.usecases.customer.UpdateCustomerUseCa
 import com.bikemmerce.commerce.domain.model.Customer;
 import com.bikemmerce.commerce.domain.result.Result;
 import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.UpdateCustomerRestRequest;
-import com.bikemmerce.commerce.infrastructure.in.rest.dto.product.CreateCustomerRestRequest;
+import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.CreateCustomerRestRequest;
 import com.bikemmerce.commerce.infrastructure.in.rest.mapper.CustomerRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

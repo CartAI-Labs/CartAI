@@ -5,7 +5,7 @@ import com.bikemmerce.commerce.application.usecases.commands.UpdateCustomerComma
 import com.bikemmerce.commerce.domain.model.Customer;
 import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.CustomerRestResponse;
 import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.UpdateCustomerRestRequest;
-import com.bikemmerce.commerce.infrastructure.in.rest.dto.product.CreateCustomerRestRequest;
+import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.CreateCustomerRestRequest;
 
 public class CustomerRestMapper {
 
