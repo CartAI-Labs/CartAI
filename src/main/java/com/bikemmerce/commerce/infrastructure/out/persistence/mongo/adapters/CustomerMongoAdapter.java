@@ -1,9 +1,9 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.adapters;
 
-import com.bikemmerce.commerce.domain.model.Customer;
-import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
-import com.bikemmerce.commerce.domain.model.value.objects.Email;
-import com.bikemmerce.commerce.domain.ports.CustomerRepositoryPort;
+import com.bikemmerce.commerce.domain.model.security.value.objects.Email;
+import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
+import com.bikemmerce.commerce.domain.model.shop.Customer;
+import com.bikemmerce.commerce.domain.ports.shop.CustomerRepositoryPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.CustomerMongoRepository;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.mapper.CustomerMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ public class CustomerMongoAdapter implements CustomerRepositoryPort {
     private final CustomerMongoRepository customerMongoRepository;
 
     @Override
-    public void delete(CustomerId customerId) {
-        customerMongoRepository.deleteById(customerId.value());
+    public void delete(UserId userId) {
+        customerMongoRepository.deleteById(userId.value());
     }
 
     @Override
-    public Customer findByCustomerId(CustomerId customerId) {
-        return customerMongoRepository.findById(customerId.value()).map(CustomerMapper::toDomain).orElse(null);
+    public Customer findByCustomerId(UserId userId) {
+        return customerMongoRepository.findById(userId.value()).map(CustomerMapper::toDomain).orElse(null);
     }
 
     @Override

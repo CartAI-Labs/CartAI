@@ -1,8 +1,8 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.adapters;
 
-import com.bikemmerce.commerce.domain.model.Product;
-import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
-import com.bikemmerce.commerce.domain.ports.ProductRepositoryPort;
+import com.bikemmerce.commerce.domain.model.shop.Product;
+import com.bikemmerce.commerce.domain.model.shop.value.objects.ProductId;
+import com.bikemmerce.commerce.domain.ports.shop.ProductRepositoryPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.ProductMongoRepository;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;

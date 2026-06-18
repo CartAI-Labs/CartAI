@@ -1,6 +1,8 @@
 package com.bikemmerce.commerce.infrastructure.in.rest.dto.product;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 

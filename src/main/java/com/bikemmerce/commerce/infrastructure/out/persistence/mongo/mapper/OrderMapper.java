@@ -1,22 +1,22 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.mapper;
 
-import com.bikemmerce.commerce.domain.model.Order;
-import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
-import com.bikemmerce.commerce.domain.model.value.objects.OrderId;
+import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
+import com.bikemmerce.commerce.domain.model.shop.Order;
+import com.bikemmerce.commerce.domain.model.shop.value.objects.OrderId;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.documents.OrderDocument;
 
 public class OrderMapper {
 
     public static OrderDocument toDocument(Order order) {
         return new OrderDocument(
-                order.getOrderId().value(), order.getCustomerId().value(),
+                order.getOrderId().value(), order.getUserId().value(),
                 order.getShoppingItems().stream().map(ShoppingItemMapper::toDocument).toList(),
                 order.getStatus(), order.getCreateDate());
     }
 
     public static Order toDomain(OrderDocument orderDocument) {
         return new Order(
-                new OrderId(orderDocument.getOrderId()), new CustomerId(orderDocument.getCustomerId()),
+                new OrderId(orderDocument.getOrderId()), new UserId(orderDocument.getCustomerId()),
                 orderDocument.getShoppingItems().stream().map(ShoppingItemMapper::toDomain).toList(),
                 orderDocument.getOrderStatus(), orderDocument.getCreateDate());
     }

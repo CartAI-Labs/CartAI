@@ -1,7 +1,7 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.mapper;
 
-import com.bikemmerce.commerce.domain.model.ShoppingItem;
-import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
+import com.bikemmerce.commerce.domain.model.shop.value.objects.ProductId;
+import com.bikemmerce.commerce.domain.model.shop.value.objects.ShoppingItem;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.documents.ShoppingItemDocument;
 
 public class ShoppingItemMapper {

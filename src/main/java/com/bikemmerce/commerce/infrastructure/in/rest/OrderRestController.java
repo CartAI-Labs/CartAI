@@ -1,11 +1,11 @@
 package com.bikemmerce.commerce.infrastructure.in.rest;
 
-import com.bikemmerce.commerce.application.usecases.order.CancelOrderUseCase;
-import com.bikemmerce.commerce.application.usecases.order.CreateOrderUseCase;
-import com.bikemmerce.commerce.application.usecases.order.GetOrderUseCase;
-import com.bikemmerce.commerce.domain.model.Order;
-import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
-import com.bikemmerce.commerce.domain.model.value.objects.OrderId;
+import com.bikemmerce.commerce.application.usecases.shop.order.CancelOrderUseCase;
+import com.bikemmerce.commerce.application.usecases.shop.order.CreateOrderUseCase;
+import com.bikemmerce.commerce.application.usecases.shop.order.GetOrderUseCase;
+import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
+import com.bikemmerce.commerce.domain.model.shop.Order;
+import com.bikemmerce.commerce.domain.model.shop.value.objects.OrderId;
 import com.bikemmerce.commerce.domain.result.Result;
 import com.bikemmerce.commerce.infrastructure.in.rest.mapper.OrderRestMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class OrderRestController {
 
     @PostMapping("/{id}")
     public ResponseEntity<?> createOrder(@PathVariable String id) {
-        Result<Order> result = createOrderUseCase.execute(new CustomerId(id));
+        Result<Order> result = createOrderUseCase.execute(new UserId(id));
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Error.");

@@ -1,11 +1,11 @@
 package com.bikemmerce.commerce.infrastructure.in.rest.mapper;
 
-import com.bikemmerce.commerce.application.usecases.commands.CreateCustomerCommand;
-import com.bikemmerce.commerce.application.usecases.commands.UpdateCustomerCommand;
-import com.bikemmerce.commerce.domain.model.Customer;
+import com.bikemmerce.commerce.application.usecases.shop.commands.CreateCustomerCommand;
+import com.bikemmerce.commerce.application.usecases.shop.commands.UpdateCustomerCommand;
+import com.bikemmerce.commerce.domain.model.shop.Customer;
+import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.CreateCustomerRestRequest;
 import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.CustomerRestResponse;
 import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.UpdateCustomerRestRequest;
-import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.CreateCustomerRestRequest;
 
 public class CustomerRestMapper {
 
@@ -19,6 +19,6 @@ public class CustomerRestMapper {
 
     public static CustomerRestResponse toResponse(Customer customer) {
         return new CustomerRestResponse(
-                customer.getCustomerId().value(), customer.getName(), customer.getEmail().value());
+                customer.userId().value(), customer.name(), customer.email().value());
     }
 }

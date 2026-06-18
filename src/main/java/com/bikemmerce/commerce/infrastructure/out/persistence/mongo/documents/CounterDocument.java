@@ -1,6 +1,5 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.documents;
 
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

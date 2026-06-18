@@ -1,8 +1,8 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.adapters;
 
-import com.bikemmerce.commerce.domain.model.Order;
-import com.bikemmerce.commerce.domain.model.value.objects.CustomerAddedEvent;
-import com.bikemmerce.commerce.domain.ports.events.CustomerAddedEventPublisherPort;
+import com.bikemmerce.commerce.domain.model.shop.Order;
+import com.bikemmerce.commerce.domain.model.shop.value.objects.CustomerAddedEvent;
+import com.bikemmerce.commerce.domain.ports.shop.events.CustomerAddedEventPublisherPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.documents.OutboxTransactionDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,8 @@ public class CustomerAddedEventPublisherOutboxTransactionAdapter implements Cust
         try {
             OutboxTransactionDocument outboxTransactionDocument = OutboxTransactionDocument.builder()
                     .aggregateType(Order.class.getSimpleName().toLowerCase())
-                    .aggregateId(event.customerId().value())
-                    .key(event.customerId().value())
+                    .aggregateId(event.userId().value())
+                    .key(event.userId().value())
                     .topic(TOPIC)
                     .payload(objectMapper.writeValueAsString(event))
                     .status(OutboxTransactionDocument.PENDING)

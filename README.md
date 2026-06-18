@@ -102,7 +102,7 @@ To secure the Outbox Scheduler in clustered or multi-instance environments:
 *   **Consumer Idempotency:** Application state validation (e.g., verifying if a shopping cart already exists before creating it) is implemented to handle double-delivery scenarios gracefully.
 
 ### 5. Strict Event Ordering
-*   To ensure all actions related to a single customer are processed in the sequence they occurred, events are partitioned using the `customerId` as the Kafka message key (configured in the Outbox message entity), routing all customer-scoped events to the same partition.
+*   To ensure all actions related to a single customer are processed in the sequence they occurred, events are partitioned using the `userId` as the Kafka message key (configured in the Outbox message entity), routing all customer-scoped events to the same partition.
 
 ---
 

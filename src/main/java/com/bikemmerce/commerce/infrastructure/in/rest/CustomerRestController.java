@@ -1,12 +1,12 @@
 package com.bikemmerce.commerce.infrastructure.in.rest;
 
-import com.bikemmerce.commerce.application.usecases.customer.CreateCustomerUseCase;
-import com.bikemmerce.commerce.application.usecases.customer.GetCustomerUseCase;
-import com.bikemmerce.commerce.application.usecases.customer.UpdateCustomerUseCase;
-import com.bikemmerce.commerce.domain.model.Customer;
+import com.bikemmerce.commerce.application.usecases.shop.customer.CreateCustomerUseCase;
+import com.bikemmerce.commerce.application.usecases.shop.customer.GetCustomerUseCase;
+import com.bikemmerce.commerce.application.usecases.shop.customer.UpdateCustomerUseCase;
+import com.bikemmerce.commerce.domain.model.shop.Customer;
 import com.bikemmerce.commerce.domain.result.Result;
-import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.UpdateCustomerRestRequest;
 import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.CreateCustomerRestRequest;
+import com.bikemmerce.commerce.infrastructure.in.rest.dto.customer.UpdateCustomerRestRequest;
 import com.bikemmerce.commerce.infrastructure.in.rest.mapper.CustomerRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

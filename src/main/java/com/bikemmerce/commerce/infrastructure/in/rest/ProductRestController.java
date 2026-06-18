@@ -1,7 +1,7 @@
 package com.bikemmerce.commerce.infrastructure.in.rest;
 
-import com.bikemmerce.commerce.application.usecases.product.*;
-import com.bikemmerce.commerce.domain.model.Product;
+import com.bikemmerce.commerce.application.usecases.shop.product.*;
+import com.bikemmerce.commerce.domain.model.shop.Product;
 import com.bikemmerce.commerce.domain.result.Result;
 import com.bikemmerce.commerce.infrastructure.in.rest.dto.product.CreateProductRestRequest;
 import com.bikemmerce.commerce.infrastructure.in.rest.dto.product.ProductRestResponse;

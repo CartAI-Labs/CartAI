@@ -1,8 +1,8 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.adapters;
 
-import com.bikemmerce.commerce.domain.model.Cart;
-import com.bikemmerce.commerce.domain.model.value.objects.CustomerId;
-import com.bikemmerce.commerce.domain.ports.CartRepositoryPort;
+import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
+import com.bikemmerce.commerce.domain.model.shop.Cart;
+import com.bikemmerce.commerce.domain.ports.shop.CartRepositoryPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.CartMongoRepository;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +17,13 @@ public class CartMongoAdapter implements CartRepositoryPort {
     private final CartMongoRepository cartMongoRepository;
 
     @Override
-    public void delete(CustomerId customerId) {
-        cartMongoRepository.deleteById(customerId.value());
+    public void delete(UserId userId) {
+        cartMongoRepository.deleteById(userId.value());
     }
 
     @Override
-    public Cart find(CustomerId customerId) {
-        return cartMongoRepository.findById(customerId.value()).map(CartMapper::toDomain).orElse(null);
+    public Cart find(UserId userId) {
+        return cartMongoRepository.findById(userId.value()).map(CartMapper::toDomain).orElse(null);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.bikemmerce.commerce.infrastructure.in.rest.dto.cart;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 

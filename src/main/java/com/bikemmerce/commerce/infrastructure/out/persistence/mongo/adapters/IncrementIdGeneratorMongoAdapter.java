@@ -1,6 +1,6 @@
 package com.bikemmerce.commerce.infrastructure.out.persistence.mongo.adapters;
 
-import com.bikemmerce.commerce.domain.ports.IncrementIdGeneratorPort;
+import com.bikemmerce.commerce.domain.ports.shop.IncrementIdGeneratorPort;
 import com.bikemmerce.commerce.infrastructure.out.persistence.mongo.documents.CounterDocument;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

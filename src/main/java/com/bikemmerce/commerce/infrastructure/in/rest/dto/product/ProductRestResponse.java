@@ -1,6 +1,6 @@
 package com.bikemmerce.commerce.infrastructure.in.rest.dto.product;
 
-import com.bikemmerce.commerce.domain.model.value.objects.ProductId;
+import com.bikemmerce.commerce.domain.model.shop.value.objects.ProductId;
 
 import java.math.BigDecimal;
 
