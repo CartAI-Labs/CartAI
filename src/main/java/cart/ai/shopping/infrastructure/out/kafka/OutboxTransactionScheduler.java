@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.infrastructure.out.kafka;
 
 import cart.ai.shopping.infrastructure.out.persistence.mongo.common.documents.OutboxTransactionDocument;
@@ -11,6 +16,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Roberto Díaz
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

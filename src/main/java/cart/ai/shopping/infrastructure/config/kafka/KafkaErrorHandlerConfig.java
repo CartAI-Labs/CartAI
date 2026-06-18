@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.infrastructure.config.kafka;
 
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +13,9 @@ import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
 
+/**
+ * @author Roberto Díaz
+ */
 @Slf4j
 public class KafkaErrorHandlerConfig {
 

@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.infrastructure.out.persistence.mongo.security.mapper;
 
 import cart.ai.shopping.domain.model.security.Role;
@@ -7,6 +12,9 @@ import cart.ai.shopping.infrastructure.out.persistence.mongo.security.documents.
 
 import java.util.stream.Collectors;
 
+/**
+ * @author Roberto Díaz
+ */
 public class RoleMapper {
 
     public static RoleDocument toDocument(Role role) {

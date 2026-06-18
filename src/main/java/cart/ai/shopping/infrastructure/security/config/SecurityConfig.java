@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.infrastructure.security.config;
 
 import cart.ai.shopping.infrastructure.security.filter.JwtAuthenticationFilter;
@@ -14,6 +19,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * @author Roberto Díaz
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

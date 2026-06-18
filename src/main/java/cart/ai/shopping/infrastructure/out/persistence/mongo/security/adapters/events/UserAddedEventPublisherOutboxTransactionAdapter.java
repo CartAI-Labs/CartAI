@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.infrastructure.out.persistence.mongo.security.adapters.events;
 
 import cart.ai.shopping.domain.model.security.User;
@@ -12,6 +17,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+/**
+ * @author Roberto Díaz
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j

@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.infrastructure.in.rest;
 
 import cart.ai.shopping.application.usecases.shop.product.*;
@@ -14,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @author Roberto Díaz
+ */
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor // Genera el constructor para la inyección por constructor de Spring

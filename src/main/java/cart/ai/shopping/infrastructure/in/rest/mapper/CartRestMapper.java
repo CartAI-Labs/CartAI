@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.infrastructure.in.rest.mapper;
 
 import cart.ai.shopping.application.usecases.shop.commands.AddShoppingItemToCartCommand;
@@ -9,6 +14,9 @@ import cart.ai.shopping.infrastructure.in.rest.dto.cart.AddShoppingItemToCartRes
 import cart.ai.shopping.infrastructure.in.rest.dto.cart.CartRestResponse;
 import cart.ai.shopping.infrastructure.in.rest.dto.cart.RemoveShoppingItemToCartRestRequest;
 
+/**
+ * @author Roberto Díaz
+ */
 public class CartRestMapper {
 
     public static AddShoppingItemToCartCommand toAddShoppingItemToCartCommand(AddShoppingItemToCartRestRequest request) {

@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.infrastructure.in.rest.mapper;
 
 import cart.ai.shopping.application.usecases.shop.commands.CreateProductCommand;
@@ -7,6 +12,9 @@ import cart.ai.shopping.infrastructure.in.rest.dto.product.CreateProductRestRequ
 import cart.ai.shopping.infrastructure.in.rest.dto.product.ProductRestResponse;
 import cart.ai.shopping.infrastructure.in.rest.dto.product.UpdateProductRestRequest;
 
+/**
+ * @author Roberto Díaz
+ */
 public class ProductRestMapper {
 
     public static CreateProductCommand toCreateProductCommand(CreateProductRestRequest request) {

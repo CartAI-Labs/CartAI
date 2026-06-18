@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 package cart.ai.shopping.domain.ports.security.repositories;
 
 import cart.ai.shopping.domain.model.security.User;
@@ -6,6 +11,9 @@ import cart.ai.shopping.domain.model.security.value.objects.UserId;
 
 import java.util.List;
 
+/**
+ * @author Roberto Díaz
+ */
 public interface UserRepositoryPort {
 
     void delete(UserId userId);
