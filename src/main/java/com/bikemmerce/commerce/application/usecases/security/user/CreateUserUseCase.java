@@ -7,9 +7,9 @@ import com.bikemmerce.commerce.domain.model.security.value.objects.Email;
 import com.bikemmerce.commerce.domain.model.security.value.objects.UserAddedEvent;
 import com.bikemmerce.commerce.domain.model.security.value.objects.UserId;
 import com.bikemmerce.commerce.domain.ports.common.IncrementIdGeneratorPort;
-import com.bikemmerce.commerce.domain.ports.security.services.PasswordEncoderPort;
-import com.bikemmerce.commerce.domain.ports.security.repositories.UserRepositoryPort;
 import com.bikemmerce.commerce.domain.ports.security.events.UserAddedEventPublisherPort;
+import com.bikemmerce.commerce.domain.ports.security.repositories.UserRepositoryPort;
+import com.bikemmerce.commerce.domain.ports.security.services.PasswordEncoderPort;
 import com.bikemmerce.commerce.domain.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,10 +34,10 @@ public class CreateUserUseCase {
         String passwordHash = passwordEncoderPort.encode(command.password());
 
         User user = userRepositoryPort.save(new User(
-                userId, 
-                command.name(), 
-                email, 
-                passwordHash, 
+                userId,
+                command.name(),
+                email,
+                passwordHash,
                 command.roles()
         ));
 
