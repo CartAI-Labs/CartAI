@@ -3,7 +3,7 @@
  * Licensed under the GNU General Public License v3.0. See LICENSE for details.
  */
 
-package cart.ai.shopping.domain.ports.identity.services;
+package cart.ai.shopping.domain.ports.security;
 
 /**
  * @author Roberto Díaz
