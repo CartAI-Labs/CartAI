@@ -5,10 +5,10 @@
 
 package cart.ai.shopping.infrastructure.in.rest.mapper;
 
-import cart.ai.shopping.application.usecases.security.commands.AuthenticateUserCommand;
-import cart.ai.shopping.application.usecases.security.commands.CreateUserCommand;
-import cart.ai.shopping.domain.model.security.Role;
-import cart.ai.shopping.domain.model.security.User;
+import cart.ai.shopping.application.usecases.identity.commands.AuthenticateUserCommand;
+import cart.ai.shopping.application.usecases.identity.commands.CreateUserCommand;
+import cart.ai.shopping.domain.model.identity.Role;
+import cart.ai.shopping.domain.model.identity.User;
 import cart.ai.shopping.infrastructure.in.rest.dto.security.AuthRestResponse;
 import cart.ai.shopping.infrastructure.in.rest.dto.security.LoginRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.dto.security.RegisterRestRequest;

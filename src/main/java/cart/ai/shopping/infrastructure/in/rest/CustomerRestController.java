@@ -9,8 +9,8 @@ import cart.ai.shopping.application.usecases.shop.customer.CreateCustomerUseCase
 import cart.ai.shopping.application.usecases.shop.customer.GetCustomerByEmailUseCase;
 import cart.ai.shopping.application.usecases.shop.customer.GetCustomerUseCase;
 import cart.ai.shopping.application.usecases.shop.customer.UpdateCustomerUseCase;
-import cart.ai.shopping.domain.model.security.value.objects.Email;
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.Email;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.Customer;
 import cart.ai.shopping.domain.result.Result;
 import cart.ai.shopping.infrastructure.in.rest.dto.customer.CreateCustomerRestRequest;

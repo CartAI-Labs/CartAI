@@ -5,7 +5,7 @@
 
 package cart.ai.shopping.application.usecases.shop.commands;
 
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.value.objects.ProductId;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

@@ -8,7 +8,7 @@ package cart.ai.shopping.infrastructure.in.rest;
 import cart.ai.shopping.application.usecases.shop.order.CancelOrderUseCase;
 import cart.ai.shopping.application.usecases.shop.order.CreateOrderUseCase;
 import cart.ai.shopping.application.usecases.shop.order.GetOrderUseCase;
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.Order;
 import cart.ai.shopping.domain.model.shop.value.objects.OrderId;
 import cart.ai.shopping.domain.result.Result;

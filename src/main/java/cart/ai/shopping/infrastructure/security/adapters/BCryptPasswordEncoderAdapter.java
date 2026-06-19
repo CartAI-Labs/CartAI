@@ -5,7 +5,7 @@
 
 package cart.ai.shopping.infrastructure.security.adapters;
 
-import cart.ai.shopping.domain.ports.security.services.PasswordEncoderPort;
+import cart.ai.shopping.domain.ports.identity.services.PasswordEncoderPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

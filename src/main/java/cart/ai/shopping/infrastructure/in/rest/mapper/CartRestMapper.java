@@ -7,7 +7,7 @@ package cart.ai.shopping.infrastructure.in.rest.mapper;
 
 import cart.ai.shopping.application.usecases.shop.commands.AddShoppingItemToCartCommand;
 import cart.ai.shopping.application.usecases.shop.commands.RemoveShoppingItemToCartCommand;
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.Cart;
 import cart.ai.shopping.domain.model.shop.value.objects.ProductId;
 import cart.ai.shopping.infrastructure.in.rest.dto.cart.AddShoppingItemToCartRestRequest;

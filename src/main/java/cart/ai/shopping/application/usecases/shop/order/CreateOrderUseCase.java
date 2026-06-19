@@ -6,10 +6,10 @@
 package cart.ai.shopping.application.usecases.shop.order;
 
 import cart.ai.shopping.application.annotations.UseCase;
-import cart.ai.shopping.domain.model.constants.OrderStatus;
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.Cart;
 import cart.ai.shopping.domain.model.shop.Order;
+import cart.ai.shopping.domain.model.shop.constants.OrderStatus;
 import cart.ai.shopping.domain.model.shop.value.objects.OrderId;
 import cart.ai.shopping.domain.model.shop.value.objects.OrderPlacedEvent;
 import cart.ai.shopping.domain.ports.common.IncrementIdGeneratorPort;

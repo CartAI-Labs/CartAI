@@ -5,8 +5,8 @@
 
 package cart.ai.shopping.domain.model.shop;
 
-import cart.ai.shopping.domain.model.constants.OrderStatus;
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
+import cart.ai.shopping.domain.model.shop.constants.OrderStatus;
 import cart.ai.shopping.domain.model.shop.value.objects.OrderId;
 import cart.ai.shopping.domain.model.shop.value.objects.ShoppingItem;
 import lombok.Data;

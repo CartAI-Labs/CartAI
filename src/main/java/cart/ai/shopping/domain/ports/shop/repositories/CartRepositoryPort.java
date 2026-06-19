@@ -5,7 +5,7 @@
 
 package cart.ai.shopping.domain.ports.shop.repositories;
 
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.Cart;
 
 import java.util.List;

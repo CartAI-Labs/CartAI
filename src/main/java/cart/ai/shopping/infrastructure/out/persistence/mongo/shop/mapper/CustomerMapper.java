@@ -5,8 +5,8 @@
 
 package cart.ai.shopping.infrastructure.out.persistence.mongo.shop.mapper;
 
-import cart.ai.shopping.domain.model.security.value.objects.Email;
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.Email;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.Customer;
 import cart.ai.shopping.infrastructure.out.persistence.mongo.shop.documents.CustomerDocument;
 

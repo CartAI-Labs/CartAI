@@ -5,7 +5,7 @@
 
 package cart.ai.shopping.infrastructure.out.persistence.mongo.shop.documents;
 
-import cart.ai.shopping.domain.model.constants.OrderStatus;
+import cart.ai.shopping.domain.model.shop.constants.OrderStatus;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;

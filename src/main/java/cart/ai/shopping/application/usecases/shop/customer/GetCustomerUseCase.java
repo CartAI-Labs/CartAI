@@ -6,7 +6,7 @@
 package cart.ai.shopping.application.usecases.shop.customer;
 
 import cart.ai.shopping.application.annotations.UseCase;
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.Customer;
 import cart.ai.shopping.domain.ports.shop.repositories.CustomerRepositoryPort;
 import cart.ai.shopping.domain.result.Result;

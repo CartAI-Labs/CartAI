@@ -5,14 +5,14 @@
 
 package cart.ai.shopping.infrastructure.in.rest;
 
-import cart.ai.shopping.application.usecases.security.commands.CreateRoleCommand;
-import cart.ai.shopping.application.usecases.security.role.CreateRoleUseCase;
-import cart.ai.shopping.application.usecases.security.user.AuthenticateUserUseCase;
-import cart.ai.shopping.application.usecases.security.user.CreateUserUseCase;
-import cart.ai.shopping.domain.model.security.Role;
-import cart.ai.shopping.domain.model.security.User;
-import cart.ai.shopping.domain.model.security.value.objects.Permission;
-import cart.ai.shopping.domain.ports.security.repositories.RoleRepositoryPort;
+import cart.ai.shopping.application.usecases.identity.commands.CreateRoleCommand;
+import cart.ai.shopping.application.usecases.identity.role.CreateRoleUseCase;
+import cart.ai.shopping.application.usecases.identity.user.AuthenticateUserUseCase;
+import cart.ai.shopping.application.usecases.identity.user.CreateUserUseCase;
+import cart.ai.shopping.domain.model.identity.Role;
+import cart.ai.shopping.domain.model.identity.User;
+import cart.ai.shopping.domain.model.identity.value.objects.Permission;
+import cart.ai.shopping.domain.ports.identity.repositories.RoleRepositoryPort;
 import cart.ai.shopping.domain.result.Result;
 import cart.ai.shopping.infrastructure.in.rest.dto.security.LoginRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.dto.security.RegisterRestRequest;

@@ -7,8 +7,8 @@ package cart.ai.shopping.application.usecases.shop.customer;
 
 import cart.ai.shopping.application.annotations.UseCase;
 import cart.ai.shopping.application.usecases.shop.commands.CreateCustomerCommand;
-import cart.ai.shopping.domain.model.security.value.objects.Email;
-import cart.ai.shopping.domain.model.security.value.objects.UserId;
+import cart.ai.shopping.domain.model.identity.value.objects.Email;
+import cart.ai.shopping.domain.model.identity.value.objects.UserId;
 import cart.ai.shopping.domain.model.shop.Customer;
 import cart.ai.shopping.domain.model.shop.value.objects.CustomerAddedEvent;
 import cart.ai.shopping.domain.ports.common.IncrementIdGeneratorPort;
