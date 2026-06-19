@@ -15,7 +15,7 @@ import org.springframework.context.annotation.FilterType;
  */
 @Configuration
 @ComponentScan(
-        basePackages = "cart.ai.shopping.application.usecases.*",
+        basePackages = "cart.ai.shopping.application.usecases",
         includeFilters = @ComponentScan.Filter(
                 type = FilterType.ANNOTATION,
                 classes = UseCase.class
