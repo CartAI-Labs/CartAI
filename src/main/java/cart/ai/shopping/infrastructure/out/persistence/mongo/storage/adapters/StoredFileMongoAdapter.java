@@ -30,14 +30,14 @@ public class StoredFileMongoAdapter implements StoredFileRepositoryPort {
     }
 
     @Override
-    public StoredFile findByFileName(String fileName) {
-        return repository.findByFileName(fileName)
+    public StoredFile findById(String id) {
+        return repository.findById(id)
                 .map(StoredFileMapper::toDomain)
                 .orElse(null);
     }
 
     @Override
-    public void deleteByFileName(String fileName) {
-        repository.deleteByFileName(fileName);
+    public void deleteById(String id) {
+        repository.deleteById(id);
     }
 }

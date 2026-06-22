@@ -9,16 +9,12 @@ import cart.ai.shopping.infrastructure.out.persistence.mongo.storage.documents.S
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 /**
  * @author Roberto Díaz
  */
 @Repository
 public interface StoredFileMongoRepository extends MongoRepository<StoredFileDocument, String> {
 
-    Optional<StoredFileDocument> findByFileName(String fileName);
 
-    void deleteByFileName(String fileName);
 
 }

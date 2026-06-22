@@ -25,6 +25,7 @@ public class StoredFileDocument {
     @Id
     private String id;
     private String fileName;
+    private String originalFileName;
     private String fileUrl;
     private String contentType;
     private String ownerId;

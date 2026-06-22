@@ -12,6 +12,7 @@ import cart.ai.shopping.application.usecases.storage.commands.DeleteFileCommand;
 import cart.ai.shopping.application.usecases.storage.commands.DownloadFileCommand;
 import cart.ai.shopping.application.usecases.storage.commands.UploadFileCommand;
 import cart.ai.shopping.domain.common.result.Result;
+import cart.ai.shopping.domain.model.storage.FileDownloadStream;
 import cart.ai.shopping.domain.model.storage.StoredFile;
 import cart.ai.shopping.infrastructure.in.rest.storage.dtos.StorageRestResponse;
 import cart.ai.shopping.infrastructure.security.services.JwtService;
@@ -78,8 +79,9 @@ public class StorageRestController {
 
             StoredFile stored = result.getValue();
             StorageRestResponse response = new StorageRestResponse(
+                    stored.id(),
+                    stored.originalFileName(),
                     stored.fileUrl(),
-                    stored.fileName(),
                     stored.contentType()
             );
 
@@ -89,50 +91,44 @@ public class StorageRestController {
         }
     }
 
-    @GetMapping("/files/{fileName}")
+    @GetMapping("/files/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getFile(
-            @PathVariable String fileName,
+            @PathVariable String id,
             @RequestHeader("Authorization") String authHeader) {
         String userId = extractUserId(authHeader);
 
         DownloadFileCommand command = new DownloadFileCommand(
-                fileName,
+                id,
                 userId
         );
 
-        Result<InputStream> result = downloadFileUseCase.execute(command);
+        Result<FileDownloadStream> result = downloadFileUseCase.execute(command);
 
         if (result.hasError()) {
             return ResponseEntity.status(result.getErrorCode()).body("Access denied or file not found.");
         }
 
-        InputStreamResource resource = new InputStreamResource(result.getValue());
+        FileDownloadStream downloadStream = result.getValue();
+        InputStreamResource resource = new InputStreamResource(downloadStream.inputStream());
 
-        MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
-        if (fileName.toLowerCase().endsWith(".png")) {
-            mediaType = MediaType.IMAGE_PNG;
-        } else if (fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg")) {
-            mediaType = MediaType.IMAGE_JPEG;
-        } else if (fileName.toLowerCase().endsWith(".gif")) {
-            mediaType = MediaType.IMAGE_GIF;
-        }
+        MediaType mediaType = MediaType.parseMediaType(downloadStream.contentType());
 
         return ResponseEntity.ok()
                 .contentType(mediaType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + downloadStream.originalFileName() + "\"")
                 .body(resource);
     }
 
-    @DeleteMapping("/files/{fileName}")
+    @DeleteMapping("/files/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> deleteFile(
-            @PathVariable String fileName,
+            @PathVariable String id,
             @RequestHeader("Authorization") String authHeader) {
         String userId = extractUserId(authHeader);
 
         DeleteFileCommand command = new DeleteFileCommand(
-                fileName,
+                id,
                 userId
         );
 

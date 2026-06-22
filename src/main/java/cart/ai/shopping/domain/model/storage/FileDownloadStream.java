@@ -3,15 +3,16 @@
  * Licensed under the GNU General Public License v3.0. See LICENSE for details.
  */
 
-package cart.ai.shopping.infrastructure.in.rest.storage.dtos;
+package cart.ai.shopping.domain.model.storage;
+
+import java.io.InputStream;
 
 /**
  * @author Roberto Díaz
  */
-public record StorageRestResponse(
-        String id,
+public record FileDownloadStream(
+        InputStream inputStream,
         String originalFileName,
-        String fileUrl,
         String contentType
 ) {
 }

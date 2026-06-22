@@ -64,7 +64,7 @@ public class MinIOStorageAdapter implements StoragePort {
 
             String fileUrl = String.format("%s/%s/%s", minioEndpoint, bucketName, fileName);
 
-            return new StoredFile("", fileName, fileUrl, contentType, null);
+            return new StoredFile("", fileName, "", fileUrl, contentType, null);
         } catch (Exception e) {
             throw new RuntimeException("Error uploading file to MinIO: " + e.getMessage(), e);
         }

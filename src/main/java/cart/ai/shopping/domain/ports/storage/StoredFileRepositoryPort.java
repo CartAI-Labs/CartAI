@@ -14,7 +14,7 @@ public interface StoredFileRepositoryPort {
 
     StoredFile save(StoredFile storedFile);
 
-    StoredFile findByFileName(String fileName);
+    StoredFile findById(String id);
 
-    void deleteByFileName(String fileName);
+    void deleteById(String id);
 }

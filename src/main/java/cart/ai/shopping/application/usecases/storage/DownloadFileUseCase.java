@@ -10,6 +10,7 @@ import cart.ai.shopping.application.usecases.storage.commands.DownloadFileComman
 import cart.ai.shopping.domain.common.result.Result;
 import cart.ai.shopping.domain.model.identity.User;
 import cart.ai.shopping.domain.model.identity.vos.UserId;
+import cart.ai.shopping.domain.model.storage.FileDownloadStream;
 import cart.ai.shopping.domain.model.storage.StoredFile;
 import cart.ai.shopping.domain.ports.identity.UserRepositoryPort;
 import cart.ai.shopping.domain.ports.storage.StoragePort;
@@ -30,13 +31,13 @@ public class DownloadFileUseCase {
     private final StoredFileRepositoryPort storedFileRepositoryPort;
     private final UserRepositoryPort userRepositoryPort;
 
-    public Result<InputStream> execute(DownloadFileCommand command) {
-        if (command == null || command.fileName().isBlank()) {
+    public Result<FileDownloadStream> execute(DownloadFileCommand command) {
+        if (command == null || command.id().isBlank()) {
             return Result.error(HttpStatus.BAD_REQUEST.value());
         }
 
-        String fileName = command.fileName();
-        StoredFile storedFile = storedFileRepositoryPort.findByFileName(fileName);
+        String id = command.id();
+        StoredFile storedFile = storedFileRepositoryPort.findById(id);
         if (storedFile == null) {
             return Result.error(HttpStatus.NOT_FOUND.value());
         }
@@ -56,8 +57,13 @@ public class DownloadFileUseCase {
         }
 
         try {
-            InputStream inputStream = storagePort.downloadFile(fileName);
-            return Result.success(inputStream);
+            InputStream inputStream = storagePort.downloadFile(storedFile.fileName());
+            FileDownloadStream downloadStream = new FileDownloadStream(
+                    inputStream,
+                    storedFile.originalFileName(),
+                    storedFile.contentType()
+            );
+            return Result.success(downloadStream);
         } catch (Exception e) {
             return Result.error(HttpStatus.NOT_FOUND.value());
         }

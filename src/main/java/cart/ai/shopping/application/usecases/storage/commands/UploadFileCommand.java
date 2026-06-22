@@ -3,19 +3,21 @@
  * Licensed under the GNU General Public License v3.0. See LICENSE for details.
  */
 
-package cart.ai.shopping.domain.model.storage;
+package cart.ai.shopping.application.usecases.storage.commands;
 
 import lombok.NonNull;
+
+import java.io.InputStream;
 
 /**
  * @author Roberto Díaz
  */
-public record StoredFile(
-        @NonNull String id,
-        @NonNull String fileName,
+public record UploadFileCommand(
+        @NonNull InputStream inputStream,
         @NonNull String originalFileName,
-        @NonNull String fileUrl,
         @NonNull String contentType,
-        String ownerId
+        long contentLength,
+        String ownerId,
+        String requesterUserId
 ) {
 }

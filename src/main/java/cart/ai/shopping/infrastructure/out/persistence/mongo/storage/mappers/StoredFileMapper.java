@@ -20,6 +20,7 @@ public class StoredFileMapper {
         return new StoredFile(
                 document.getId(),
                 document.getFileName(),
+                document.getOriginalFileName(),
                 document.getFileUrl(),
                 document.getContentType(),
                 document.getOwnerId()
@@ -33,6 +34,7 @@ public class StoredFileMapper {
         return StoredFileDocument.builder()
                 .id(domain.id())
                 .fileName(domain.fileName())
+                .originalFileName(domain.originalFileName())
                 .fileUrl(domain.fileUrl())
                 .contentType(domain.contentType())
                 .ownerId(domain.ownerId())

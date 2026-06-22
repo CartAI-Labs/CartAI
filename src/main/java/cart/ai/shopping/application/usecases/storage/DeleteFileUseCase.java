@@ -29,7 +29,7 @@ public class DeleteFileUseCase {
     private final UserRepositoryPort userRepositoryPort;
 
     public Result<Void> execute(DeleteFileCommand command) {
-        if (command == null || command.fileName().isBlank()) {
+        if (command == null || command.id().isBlank()) {
             return Result.error(HttpStatus.BAD_REQUEST.value());
         }
 
@@ -38,8 +38,8 @@ public class DeleteFileUseCase {
             return Result.error(HttpStatus.UNAUTHORIZED.value());
         }
 
-        String fileName = command.fileName();
-        StoredFile storedFile = storedFileRepositoryPort.findByFileName(fileName);
+        String id = command.id();
+        StoredFile storedFile = storedFileRepositoryPort.findById(id);
         if (storedFile == null) {
             return Result.error(HttpStatus.NOT_FOUND.value());
         }
@@ -61,8 +61,8 @@ public class DeleteFileUseCase {
         }
 
         try {
-            storagePort.deleteFile(fileName);
-            storedFileRepositoryPort.deleteByFileName(fileName);
+            storagePort.deleteFile(storedFile.fileName());
+            storedFileRepositoryPort.deleteById(id);
             return Result.success(null);
         } catch (Exception e) {
             return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value());

@@ -72,10 +72,11 @@ public class UploadFileUseCase {
         String uniqueFileName = id + getExtension(command);
 
         try {
-            StoredFile result = storagePort.uploadFile(command.inputStream(), , command.contentType(), command.contentLength());
+            StoredFile result = storagePort.uploadFile(command.inputStream(), uniqueFileName, command.contentType(), command.contentLength());
             StoredFile storedFile = new StoredFile(
                     id,
                     result.fileName(),
+                    command.originalFileName(),
                     result.fileUrl(),
                     result.contentType(),
                     command.ownerId()
