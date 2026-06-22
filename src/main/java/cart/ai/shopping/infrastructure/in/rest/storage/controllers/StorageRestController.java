@@ -16,7 +16,7 @@ import cart.ai.shopping.domain.model.storage.FileDownloadStream;
 import cart.ai.shopping.domain.model.storage.StoredFile;
 import cart.ai.shopping.infrastructure.in.rest.common.ResultErrorHttpStatusMapper;
 import cart.ai.shopping.infrastructure.in.rest.storage.dtos.StorageRestResponse;
-import cart.ai.shopping.infrastructure.security.services.JwtService;
+import cart.ai.shopping.infrastructure.security.services.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -41,15 +41,8 @@ public class StorageRestController {
     private final UploadFileUseCase uploadFileUseCase;
     private final DownloadFileUseCase downloadFileUseCase;
     private final DeleteFileUseCase deleteFileUseCase;
-    private final JwtService jwtService;
+    private final UserAuthService userAuthService;
 
-    private String extractUserId(String authHeader) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
-        }
-        String token = authHeader.substring(7);
-        return jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
-    }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
@@ -60,7 +53,7 @@ public class StorageRestController {
             return ResponseEntity.badRequest().body("File cannot be empty.");
         }
 
-        String userId = extractUserId(authHeader);
+        String userId = userAuthService.getUserId(authHeader);
 
         try (InputStream inputStream = file.getInputStream()) {
             UploadFileCommand command = new UploadFileCommand(
@@ -93,11 +86,10 @@ public class StorageRestController {
     }
 
     @GetMapping("/files/{id}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getFile(
             @PathVariable String id,
             @RequestHeader("Authorization") String authHeader) {
-        String userId = extractUserId(authHeader);
+        String userId = userAuthService.getUserId(authHeader);
 
         DownloadFileCommand command = new DownloadFileCommand(
                 id,
@@ -126,7 +118,7 @@ public class StorageRestController {
     public ResponseEntity<?> deleteFile(
             @PathVariable String id,
             @RequestHeader("Authorization") String authHeader) {
-        String userId = extractUserId(authHeader);
+        String userId = userAuthService.getUserId(authHeader);
 
         DeleteFileCommand command = new DeleteFileCommand(
                 id,

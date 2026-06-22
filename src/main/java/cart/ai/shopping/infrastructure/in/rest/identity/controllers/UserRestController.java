@@ -5,24 +5,28 @@
 
 package cart.ai.shopping.infrastructure.in.rest.identity.controllers;
 
-import cart.ai.shopping.application.usecases.identity.user.DeleteUserUseCase;
-import cart.ai.shopping.application.usecases.identity.user.GetUserUseCase;
-import cart.ai.shopping.application.usecases.identity.user.ListUserUseCase;
-import cart.ai.shopping.application.usecases.identity.user.UpdateUserUseCase;
+import cart.ai.shopping.application.usecases.identity.user.*;
+import cart.ai.shopping.application.usecases.identity.user.commands.CreateUserCommand;
 import cart.ai.shopping.domain.common.result.Result;
+import cart.ai.shopping.domain.model.identity.Role;
 import cart.ai.shopping.domain.model.identity.User;
 import cart.ai.shopping.domain.model.identity.vos.UserId;
+import cart.ai.shopping.domain.ports.identity.RoleRepositoryPort;
 import cart.ai.shopping.infrastructure.in.rest.common.ResultErrorHttpStatusMapper;
+import cart.ai.shopping.infrastructure.in.rest.identity.dtos.CreateUserRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.identity.dtos.UpdateUserRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.identity.dtos.UserRestResponse;
 import cart.ai.shopping.infrastructure.in.rest.identity.mappers.UserRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Roberto Díaz
@@ -36,6 +40,8 @@ public class UserRestController {
     private final ListUserUseCase listUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
+    private final CreateUserUseCase createUserUseCase;
+    private final RoleRepositoryPort roleRepositoryPort;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('READ_USERS')")
@@ -47,7 +53,30 @@ public class UserRestController {
         return ResponseEntity.ok(responses);
     }
 
+    @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('WRITE_USERS')")
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRestRequest request) {
+        Set<Role> roles = request.roles().stream()
+                .map(roleRepositoryPort::findByName)
+                .collect(Collectors.toSet());
+
+        if (roles.contains(null)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One or more roles do not exist.");
+        }
+
+        Result<User> result = createUserUseCase.execute(
+                new CreateUserCommand(request.name(), request.email(), request.password(), roles, null)
+        );
+
+        if (result.hasError()) {
+            return ResponseEntity.status(ResultErrorHttpStatusMapper.toHttpStatus(result.getError())).body("User creation failed.");
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserRestMapper.toResponse(result.getValue()));
+    }
+
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('READ_USERS') or principal.username == #id")
     public ResponseEntity<?> getUserById(@PathVariable String id) {
         Result<User> result = getUserUseCase.execute(new UserId(id));
 
@@ -71,7 +100,7 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('WRITE_USERS')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('WRITE_USERS') or principal.username == #id")
     public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody UpdateUserRestRequest request) {
         if (!id.equals(request.id())) {
             return ResponseEntity.badRequest().body("ID mismatch");
@@ -85,4 +114,5 @@ public class UserRestController {
 
         return ResponseEntity.ok(UserRestMapper.toResponse(result.getValue()));
     }
+
 }

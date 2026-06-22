@@ -16,7 +16,10 @@ import cart.ai.shopping.domain.ports.common.IncrementIdGeneratorPort;
 import cart.ai.shopping.domain.ports.identity.PasswordEncoderPort;
 import cart.ai.shopping.domain.ports.identity.UserAddedEventPublisherPort;
 import cart.ai.shopping.domain.ports.identity.UserRepositoryPort;
+import cart.ai.shopping.domain.ports.storage.StoragePort;
+import cart.ai.shopping.domain.ports.storage.TempStoragePort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import static cart.ai.shopping.domain.common.result.ResultError.CONFLICT;
 
@@ -25,12 +28,15 @@ import static cart.ai.shopping.domain.common.result.ResultError.CONFLICT;
  */
 @RequiredArgsConstructor
 @UseCase
+@Slf4j
 public class CreateUserUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
     private final UserAddedEventPublisherPort userAddedEventPublisherPort;
     private final IncrementIdGeneratorPort incrementIdGeneratorPort;
     private final PasswordEncoderPort passwordEncoderPort;
+    private final StoragePort storagePort;
+    private final TempStoragePort tempStoragePort;
 
     public Result<User> execute(CreateUserCommand command) {
         Email email = new Email(command.email());
@@ -41,6 +47,15 @@ public class CreateUserUseCase {
 
         UserId userId = new UserId(incrementIdGeneratorPort.generate(User.class));
         String passwordHash = passwordEncoderPort.encode(command.password());
+        String finalAvatarId = null;
+        if (command.avatarFileId() != null && !command.avatarFileId().isBlank()) {
+            try {
+                storagePort.promoteFile(command.avatarFileId(), tempStoragePort.getBucketName());
+                finalAvatarId = command.avatarFileId();
+            } catch (Exception e) {
+                log.warn("Could not promote temp avatar {}: {}", command.avatarFileId(), e.getMessage());
+            }
+        }
 
         User user = userRepositoryPort.save(new User(
                 userId,
@@ -48,7 +63,7 @@ public class CreateUserUseCase {
                 email,
                 passwordHash,
                 command.roles(),
-                command.avatarFileId()
+                finalAvatarId
         ));
 
         userAddedEventPublisherPort.added(new UserAddedEvent(

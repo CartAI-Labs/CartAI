@@ -5,20 +5,17 @@
 
 package cart.ai.shopping.infrastructure.in.rest.identity.controllers;
 
-import cart.ai.shopping.application.usecases.identity.role.CreateRoleUseCase;
-import cart.ai.shopping.application.usecases.identity.role.commands.CreateRoleCommand;
 import cart.ai.shopping.application.usecases.identity.user.AuthenticateUserUseCase;
 import cart.ai.shopping.application.usecases.identity.user.CreateUserUseCase;
 import cart.ai.shopping.domain.common.result.Result;
 import cart.ai.shopping.domain.model.identity.Role;
 import cart.ai.shopping.domain.model.identity.User;
-import cart.ai.shopping.domain.model.identity.vos.Permission;
 import cart.ai.shopping.domain.ports.identity.RoleRepositoryPort;
 import cart.ai.shopping.infrastructure.in.rest.common.ResultErrorHttpStatusMapper;
 import cart.ai.shopping.infrastructure.in.rest.identity.dtos.LoginRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.identity.dtos.RegisterRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.identity.mappers.AuthRestMapper;
-import cart.ai.shopping.infrastructure.security.services.JwtService;
+import cart.ai.shopping.infrastructure.security.services.UserAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,9 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Roberto Díaz
@@ -42,13 +37,17 @@ public class AuthRestController {
 
     private final CreateUserUseCase createUserUseCase;
     private final AuthenticateUserUseCase authenticateUserUseCase;
-    private final CreateRoleUseCase createRoleUseCase;
     private final RoleRepositoryPort roleRepositoryPort;
-    private final JwtService jwtService;
+    private final UserAuthService userAuthService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRestRequest request) {
-        Role customerRole = getOrCreateCustomerRole();
+        Role customerRole = roleRepositoryPort.findByName("CUSTOMER");
+
+        if (customerRole == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Critical error: CUSTOMER role not found in system.");
+        }
+
         Result<User> result = createUserUseCase.execute(AuthRestMapper.toCreateUserCommand(request, Set.of(customerRole)));
 
         if (result.hasError()) {
@@ -57,7 +56,7 @@ public class AuthRestController {
 
         return ResponseEntity.ok(AuthRestMapper.toResponse(
                 result.getValue(),
-                generateTokenForUser(result.getValue())
+                userAuthService.generateToken(result.getValue())
         ));
     }
 
@@ -71,37 +70,11 @@ public class AuthRestController {
 
         return ResponseEntity.ok(AuthRestMapper.toResponse(
                 result.getValue(),
-                generateTokenForUser(result.getValue())
+                userAuthService.generateToken(result.getValue())
         ));
     }
 
-    private Role getOrCreateCustomerRole() {
-        Role role = roleRepositoryPort.findByName("CUSTOMER");
 
-        if (role == null) {
-            Result<Role> result = createRoleUseCase.execute(new CreateRoleCommand(
-                    "CUSTOMER",
-                    Set.of("WRITE_ORDERS", "READ_ORDERS", "WRITE_CARTS", "READ_CARTS", "WRITE_IMAGE")
-            ));
-            if (result.hasError()) {
-                throw new IllegalStateException("Could not create CUSTOMER role");
-            }
-            return result.getValue();
-        }
 
-        return role;
-    }
 
-    private String generateTokenForUser(User user) {
-        Map<String, Object> extraClaims = Map.of(
-                "userId", user.userId().value(),
-                "roles", user.roles().stream().map(Role::name).toList(),
-                "permissions", user.roles().stream()
-                        .flatMap(role -> role.permissions().stream())
-                        .map(Permission::value)
-                        .collect(Collectors.toSet())
-        );
-
-        return jwtService.generateToken(user.email().value(), extraClaims);
-    }
 }
