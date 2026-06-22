@@ -16,6 +16,7 @@ import cart.ai.shopping.infrastructure.in.rest.shop.mappers.ProductRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class ProductRestController {
     private final UpdateProductUseCase updateProductUseCase;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('VENDOR', 'ADMIN')")
     public ResponseEntity<?> createProduct(@RequestBody @Valid CreateProductRestRequest request) {
         Result<Product> result = createProductUseCase.execute(ProductRestMapper.toCreateProductCommand(request));
 
@@ -46,6 +48,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'VENDOR', 'ADMIN')")
     public ResponseEntity<?> getProductById(@PathVariable String id) {
         Result<Product> result = getProductUseCase.execute(id);
 
@@ -57,6 +60,7 @@ public class ProductRestController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('VENDOR', 'ADMIN')")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         Result<Product> result = deleteProductUseCase.execute(id);
 
@@ -68,6 +72,7 @@ public class ProductRestController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'VENDOR', 'ADMIN')")
     public ResponseEntity<?> getProducts() {
         Result<List<Product>> result = listProductUseCase.execute();
 
@@ -78,6 +83,7 @@ public class ProductRestController {
     }
 
     @PutMapping()
+    @PreAuthorize("hasAnyRole('VENDOR', 'ADMIN')")
     public ResponseEntity<?> putProduct(@RequestBody @Valid UpdateProductRestRequest request) {
         Result<Product> result = updateProductUseCase.execute(ProductRestMapper.toUpdateProductCommand(request));
 
