@@ -28,6 +28,7 @@ public class UserMapper {
                 .roleIds(user.roles().stream()
                         .map(role -> role.id().value())
                         .collect(Collectors.toSet()))
+                .avatarFileId(user.avatarFileId())
                 .build();
     }
 
@@ -37,7 +38,8 @@ public class UserMapper {
                 document.getName(),
                 new Email(document.getEmail()),
                 document.getPasswordHash(),
-                roles
+                roles,
+                document.getAvatarFileId()
         );
     }
 }

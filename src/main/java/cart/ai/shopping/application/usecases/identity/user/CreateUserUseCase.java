@@ -47,7 +47,8 @@ public class CreateUserUseCase {
                 command.name(),
                 email,
                 passwordHash,
-                command.roles()
+                command.roles(),
+                command.avatarFileId()
         ));
 
         userAddedEventPublisherPort.added(new UserAddedEvent(

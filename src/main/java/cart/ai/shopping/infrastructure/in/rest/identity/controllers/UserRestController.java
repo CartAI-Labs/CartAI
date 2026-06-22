@@ -8,12 +8,15 @@ package cart.ai.shopping.infrastructure.in.rest.identity.controllers;
 import cart.ai.shopping.application.usecases.identity.user.DeleteUserUseCase;
 import cart.ai.shopping.application.usecases.identity.user.GetUserUseCase;
 import cart.ai.shopping.application.usecases.identity.user.ListUserUseCase;
+import cart.ai.shopping.application.usecases.identity.user.UpdateUserUseCase;
 import cart.ai.shopping.domain.common.result.Result;
 import cart.ai.shopping.domain.model.identity.User;
 import cart.ai.shopping.domain.model.identity.vos.UserId;
 import cart.ai.shopping.infrastructure.in.rest.common.ResultErrorHttpStatusMapper;
+import cart.ai.shopping.infrastructure.in.rest.identity.dtos.UpdateUserRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.identity.dtos.UserRestResponse;
 import cart.ai.shopping.infrastructure.in.rest.identity.mappers.UserRestMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +35,7 @@ public class UserRestController {
     private final GetUserUseCase getUserUseCase;
     private final ListUserUseCase listUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
+    private final UpdateUserUseCase updateUserUseCase;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('READ_USERS')")
@@ -61,6 +65,22 @@ public class UserRestController {
 
         if (result.hasError()) {
             return ResponseEntity.status(ResultErrorHttpStatusMapper.toHttpStatus(result.getError())).body("Could not delete user.");
+        }
+
+        return ResponseEntity.ok(UserRestMapper.toResponse(result.getValue()));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('WRITE_USERS')")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody UpdateUserRestRequest request) {
+        if (!id.equals(request.id())) {
+            return ResponseEntity.badRequest().body("ID mismatch");
+        }
+
+        Result<User> result = updateUserUseCase.execute(UserRestMapper.toUpdateUserCommand(request));
+
+        if (result.hasError()) {
+            return ResponseEntity.status(ResultErrorHttpStatusMapper.toHttpStatus(result.getError())).body("Could not update user.");
         }
 
         return ResponseEntity.ok(UserRestMapper.toResponse(result.getValue()));

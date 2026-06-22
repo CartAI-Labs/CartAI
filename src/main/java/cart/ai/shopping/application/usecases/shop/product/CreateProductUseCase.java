@@ -38,7 +38,8 @@ public class CreateProductUseCase {
                 command.name(),
                 command.description(),
                 command.price(),
-                command.stock()
+                command.stock(),
+                command.imageFileIds()
         );
 
         return Result.success(productRepositoryPort.save(product));

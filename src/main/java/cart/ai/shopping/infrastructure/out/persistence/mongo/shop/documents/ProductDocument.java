@@ -11,6 +11,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Roberto Díaz
@@ -30,5 +31,7 @@ public class ProductDocument {
     private final BigDecimal price;
 
     private final Integer stock;
+
+    private final List<String> imageFileIds;
 
 }

@@ -22,6 +22,7 @@ import static cart.ai.shopping.domain.common.result.ResultError.NOT_FOUND;
 public class DeleteUserUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
+    private final cart.ai.shopping.domain.ports.storage.StoragePort storagePort;
 
     public Result<User> execute(UserId userId) {
         User user = userRepositoryPort.findByUserId(userId);
@@ -31,6 +32,10 @@ public class DeleteUserUseCase {
         }
 
         userRepositoryPort.delete(userId);
+
+        if (user.avatarFileId() != null) {
+            storagePort.deleteFile(user.avatarFileId());
+        }
 
         return Result.success(user);
     }

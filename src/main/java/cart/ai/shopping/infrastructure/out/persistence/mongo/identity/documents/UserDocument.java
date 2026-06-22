@@ -31,4 +31,6 @@ public class UserDocument {
 
     private final Set<String> roleIds;
 
+    private final String avatarFileId;
+
 }

@@ -21,7 +21,7 @@ import java.util.Set;
 public class AuthRestMapper {
 
     public static CreateUserCommand toCreateUserCommand(RegisterRestRequest request, Set<Role> roles) {
-        return new CreateUserCommand(request.name(), request.email(), request.password(), roles);
+        return new CreateUserCommand(request.name(), request.email(), request.password(), roles, request.avatarFileId());
     }
 
     public static AuthenticateUserCommand toAuthenticateUserCommand(LoginRestRequest request) {

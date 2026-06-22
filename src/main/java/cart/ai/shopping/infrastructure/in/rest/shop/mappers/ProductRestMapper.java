@@ -19,16 +19,16 @@ public class ProductRestMapper {
 
     public static CreateProductCommand toCreateProductCommand(CreateProductRestRequest request) {
         return new CreateProductCommand(
-                request.name(), request.description(), request.price(), request.stock());
+                request.name(), request.description(), request.price(), request.stock(), request.imageFileIds());
     }
 
     public static UpdateProductCommand toUpdateProductCommand(UpdateProductRestRequest request) {
         return new UpdateProductCommand(
-                request.id(), request.name(), request.description(), request.price(), request.stock());
+                request.id(), request.name(), request.description(), request.price(), request.stock(), request.imageFileIds());
     }
 
     public static ProductRestResponse toResponse(Product product) {
         return new ProductRestResponse(
-                product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock());
+                product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), product.getImageFileIds());
     }
 }

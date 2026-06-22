@@ -5,12 +5,11 @@
 
 package cart.ai.shopping.infrastructure.in.kafka.shop.events.listeners;
 
+import cart.ai.shopping.domain.model.identity.User;
 import cart.ai.shopping.domain.model.shop.Cart;
-import cart.ai.shopping.domain.model.shop.Customer;
-import cart.ai.shopping.domain.model.shop.vos.CustomerAddedEvent;
 import cart.ai.shopping.domain.model.shop.vos.OrderPlacedEvent;
+import cart.ai.shopping.domain.ports.identity.UserRepositoryPort;
 import cart.ai.shopping.domain.ports.shop.CartRepositoryPort;
-import cart.ai.shopping.domain.ports.shop.CustomerRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,19 +23,19 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class OrderPlacedEventNotificationListener {
 
-    private final CustomerRepositoryPort customerRepositoryPort;
+    private final UserRepositoryPort userRepositoryPort;
     private final CartRepositoryPort cartRepositoryPort;
 
     @KafkaListener(topics = "orders-topic", groupId = "email-notification")
     public void notify(OrderPlacedEvent orderPlacedEvent) {
 
-        Customer customer = customerRepositoryPort.findByCustomerId(orderPlacedEvent.userId());
+        User user = userRepositoryPort.findByUserId(orderPlacedEvent.userId());
 
-        log.info("email sent for {} to {}", orderPlacedEvent.orderId(), customer.email().value());
+        log.info("email sent for {} to {}", orderPlacedEvent.orderId(), user.email().value());
     }
 
     @KafkaListener(topics = "orders-topic", groupId = "post-processor")
-    public void postProcess(CustomerAddedEvent event) {
+    public void postProcess(OrderPlacedEvent event) {
         Cart cart = cartRepositoryPort.find(event.userId());
 
         if (cart == null) {

@@ -22,6 +22,7 @@ import static cart.ai.shopping.domain.common.result.ResultError.INTERNAL_ERROR;
 public class DeleteProductUseCase {
 
     private final ProductRepositoryPort productRepositoryPort;
+    private final cart.ai.shopping.domain.ports.storage.StoragePort storagePort;
 
     public Result<Product> execute(String id) {
         ProductId productId = new ProductId(id);
@@ -33,6 +34,12 @@ public class DeleteProductUseCase {
         }
 
         productRepositoryPort.delete(productId);
+
+        if (product.getImageFileIds() != null) {
+            for (String fileId : product.getImageFileIds()) {
+                storagePort.deleteFile(fileId);
+            }
+        }
 
         return Result.success(product);
     }

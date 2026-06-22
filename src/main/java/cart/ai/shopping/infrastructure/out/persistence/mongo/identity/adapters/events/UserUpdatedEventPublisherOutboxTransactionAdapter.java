@@ -3,11 +3,11 @@
  * Licensed under the GNU General Public License v3.0. See LICENSE for details.
  */
 
-package cart.ai.shopping.infrastructure.out.persistence.mongo.shop.adapters.events;
+package cart.ai.shopping.infrastructure.out.persistence.mongo.identity.adapters.events;
 
-import cart.ai.shopping.domain.model.shop.Customer;
-import cart.ai.shopping.domain.model.shop.vos.CustomerAddedEvent;
-import cart.ai.shopping.domain.ports.shop.CustomerAddedEventPublisherPort;
+import cart.ai.shopping.domain.model.identity.User;
+import cart.ai.shopping.domain.model.identity.vos.UserUpdatedEvent;
+import cart.ai.shopping.domain.ports.identity.UserUpdatedEventPublisherPort;
 import cart.ai.shopping.infrastructure.out.persistence.mongo.common.documents.OutboxTransactionDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +23,17 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CustomerAddedEventPublisherOutboxTransactionAdapter implements CustomerAddedEventPublisherPort {
+public class UserUpdatedEventPublisherOutboxTransactionAdapter implements UserUpdatedEventPublisherPort {
 
-    private static final String TOPIC = "customers-topic";
+    private static final String TOPIC = "users-topic";
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
 
     @Override
-    public void added(CustomerAddedEvent event) {
+    public void updated(UserUpdatedEvent event) {
         try {
             OutboxTransactionDocument outboxTransactionDocument = OutboxTransactionDocument.builder()
-                    .aggregateType(Customer.class.getSimpleName().toLowerCase())
+                    .aggregateType(User.class.getSimpleName().toLowerCase())
                     .aggregateId(event.userId().value())
                     .key(event.userId().value())
                     .topic(TOPIC)

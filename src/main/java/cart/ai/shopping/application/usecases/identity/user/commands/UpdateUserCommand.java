@@ -3,23 +3,30 @@
  * Licensed under the GNU General Public License v3.0. See LICENSE for details.
  */
 
-package cart.ai.shopping.infrastructure.in.rest.shop.dtos;
+package cart.ai.shopping.application.usecases.identity.user.commands;
 
-import jakarta.validation.constraints.Email;
+import cart.ai.shopping.domain.model.identity.Role;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.Set;
 
 /**
  * @author Roberto Díaz
  */
-public record UpdateCustomerRestRequest(
+public record UpdateUserCommand(
         @NotBlank(message = "Id is mandatory")
         String id,
 
         @NotBlank(message = "Name is mandatory")
         String name,
 
-        @Email
         @NotBlank(message = "Email is mandatory")
-        String email
+        String email,
+
+        @NotNull
+        Set<Role> roles,
+
+        String avatarFileId
 ) {
 }

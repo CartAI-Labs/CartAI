@@ -25,7 +25,7 @@ public class UpdateProductUseCase {
     private final ProductRepositoryPort productRepositoryPort;
 
     public Result<Product> execute(UpdateProductCommand command) {
-        Product product = new Product(new ProductId(command.id()), command.name(), command.description(), command.price(), command.stock());
+        Product product = new Product(new ProductId(command.id()), command.name(), command.description(), command.price(), command.stock(), command.imageFileIds());
 
         if (isUpdatableProduct(product)) {
             return Result.success(productRepositoryPort.save(product));
