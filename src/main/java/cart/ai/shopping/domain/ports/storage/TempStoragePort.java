@@ -12,13 +12,11 @@ import java.io.InputStream;
 /**
  * @author Roberto Díaz
  */
-public interface StoragePort {
+public interface TempStoragePort {
 
     StoredFile uploadFile(InputStream inputStream, String fileName, String contentType, long contentLength);
 
-    InputStream downloadFile(String fileName);
-
     void deleteFile(String fileName);
 
-    void promoteFile(String fileName, String sourceBucketName);
+    String getBucketName();
 }

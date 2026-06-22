@@ -6,7 +6,7 @@
 package cart.ai.shopping.infrastructure.out.storage;
 
 import cart.ai.shopping.domain.model.storage.StoredFile;
-import cart.ai.shopping.domain.ports.storage.StoragePort;
+import cart.ai.shopping.domain.ports.storage.TempStoragePort;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,11 +21,11 @@ import java.io.InputStream;
  */
 @Component
 @Slf4j
-public class MinIOStorageAdapter extends BaseStorageAdapter implements StoragePort {
+public class MinIOTempStorageAdapter extends BaseStorageAdapter implements TempStoragePort {
 
-    public MinIOStorageAdapter(
+    public MinIOTempStorageAdapter(
             S3Client s3Client,
-            @Value("${minio.bucket-name}") String bucketName,
+            @Value("${minio.temp-bucket-name}") String bucketName,
             @Value("${minio.bucket-name}") String urlBucketName,
             @Value("${minio.endpoint}") String minioEndpoint) {
 
@@ -45,7 +45,26 @@ public class MinIOStorageAdapter extends BaseStorageAdapter implements StoragePo
                     .build();
             s3Client.createBucket(createBucketRequest);
         } catch (Exception e) {
-            log.error("Error checking or creating bucket in MinIO: " + bucketName, e);
+            log.error("Error checking or creating temp bucket in MinIO: " + bucketName, e);
+        }
+
+        try {
+            LifecycleRule filterRule = LifecycleRule.builder()
+                    .id("Delete temporary files")
+                    .filter(LifecycleRuleFilter.builder().prefix("").build())
+                    .expiration(LifecycleExpiration.builder().days(1).build())
+                    .status(ExpirationStatus.ENABLED)
+                    .build();
+
+            PutBucketLifecycleConfigurationRequest lifecycleRequest = PutBucketLifecycleConfigurationRequest.builder()
+                    .bucket(bucketName)
+                    .lifecycleConfiguration(BucketLifecycleConfiguration.builder()
+                            .rules(filterRule)
+                            .build())
+                    .build();
+            s3Client.putBucketLifecycleConfiguration(lifecycleRequest);
+        } catch (Exception e) {
+            log.error("Error setting temp bucket lifecycle configuration: " + bucketName, e);
         }
     }
 
@@ -55,35 +74,13 @@ public class MinIOStorageAdapter extends BaseStorageAdapter implements StoragePo
     }
 
     @Override
-    public InputStream downloadFile(String fileName) {
-        return super.download(fileName);
-    }
-
-    @Override
     public void deleteFile(String fileName) {
         super.delete(fileName);
     }
 
     @Override
-    public void promoteFile(String fileName, String tempBucketName) {
-        try {
-            CopyObjectRequest copyObjectRequest = CopyObjectRequest.builder()
-                    .sourceBucket(tempBucketName)
-                    .sourceKey(fileName)
-                    .destinationBucket(bucketName)
-                    .destinationKey(fileName)
-                    .build();
-
-            s3Client.copyObject(copyObjectRequest);
-
-            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                    .bucket(tempBucketName)
-                    .key(fileName)
-                    .build();
-
-            s3Client.deleteObject(deleteObjectRequest);
-        } catch (Exception e) {
-            throw new RuntimeException("Error promoting file from " + tempBucketName + " to " + bucketName + ": " + e.getMessage(), e);
-        }
+    public String getBucketName() {
+        return bucketName;
     }
+
 }

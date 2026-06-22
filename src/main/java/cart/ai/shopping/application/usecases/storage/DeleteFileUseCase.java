@@ -11,11 +11,13 @@ import cart.ai.shopping.domain.common.result.Result;
 import cart.ai.shopping.domain.model.identity.User;
 import cart.ai.shopping.domain.model.identity.vos.UserId;
 import cart.ai.shopping.domain.model.storage.StoredFile;
+import cart.ai.shopping.domain.model.storage.vos.StoredFileEvent;
 import cart.ai.shopping.domain.ports.identity.UserRepositoryPort;
-import cart.ai.shopping.domain.ports.storage.StoragePort;
+import cart.ai.shopping.domain.ports.storage.StoredFileEventPublisherPort;
 import cart.ai.shopping.domain.ports.storage.StoredFileRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Roberto Díaz
@@ -24,10 +26,11 @@ import org.springframework.http.HttpStatus;
 @UseCase
 public class DeleteFileUseCase {
 
-    private final StoragePort storagePort;
+    private final StoredFileEventPublisherPort storedFileEventPublisherPort;
     private final StoredFileRepositoryPort storedFileRepositoryPort;
     private final UserRepositoryPort userRepositoryPort;
 
+    @Transactional
     public Result<Void> execute(DeleteFileCommand command) {
         if (command == null || command.id().isBlank()) {
             return Result.error(HttpStatus.BAD_REQUEST.value());
@@ -61,8 +64,8 @@ public class DeleteFileUseCase {
         }
 
         try {
-            storagePort.deleteFile(storedFile.fileName());
             storedFileRepositoryPort.deleteById(id);
+            storedFileEventPublisherPort.deletionConfirmed(new StoredFileEvent(storedFile.fileName()));
             return Result.success(null);
         } catch (Exception e) {
             return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value());
