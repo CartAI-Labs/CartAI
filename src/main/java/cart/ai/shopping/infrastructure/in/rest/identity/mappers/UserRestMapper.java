@@ -5,14 +5,26 @@
 
 package cart.ai.shopping.infrastructure.in.rest.identity.mappers;
 
+import cart.ai.shopping.application.usecases.identity.user.commands.UpdateUserCommand;
 import cart.ai.shopping.domain.model.identity.Role;
 import cart.ai.shopping.domain.model.identity.User;
+import cart.ai.shopping.infrastructure.in.rest.identity.dtos.UpdateUserRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.identity.dtos.UserRestResponse;
 
 /**
  * @author Roberto Díaz
  */
 public class UserRestMapper {
+
+    public static UpdateUserCommand toUpdateUserCommand(UpdateUserRestRequest request) {
+        return new UpdateUserCommand(
+                request.id(),
+                request.name(),
+                request.email(),
+                request.roles(),
+                request.avatarFileId()
+        );
+    }
 
     public static UserRestResponse toResponse(User user) {
         if (user == null) {
@@ -22,7 +34,8 @@ public class UserRestMapper {
                 user.userId().value(),
                 user.name(),
                 user.email().value(),
-                user.roles().stream().map(Role::name).toList()
+                user.roles().stream().map(Role::name).toList(),
+                user.avatarFileId()
         );
     }
 }

@@ -15,6 +15,9 @@ import java.util.Set;
  * @author Roberto Díaz
  */
 public record User(@NonNull UserId userId, @NonNull String name, @NonNull Email email, @NonNull String passwordHash,
-                   @NonNull Set<Role> roles) {
+                   @NonNull Set<Role> roles, String avatarFileId) {
 
+    public User(@NonNull UserId userId, @NonNull String name, @NonNull Email email, @NonNull String passwordHash, @NonNull Set<Role> roles) {
+        this(userId, name, email, passwordHash, roles, null);
+    }
 }

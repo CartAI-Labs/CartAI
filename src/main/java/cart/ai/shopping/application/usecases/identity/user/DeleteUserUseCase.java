@@ -11,7 +11,8 @@ import cart.ai.shopping.domain.model.identity.User;
 import cart.ai.shopping.domain.model.identity.vos.UserId;
 import cart.ai.shopping.domain.ports.identity.UserRepositoryPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+
+import static cart.ai.shopping.domain.common.result.ResultError.NOT_FOUND;
 
 /**
  * @author Roberto Díaz
@@ -21,15 +22,20 @@ import org.springframework.http.HttpStatus;
 public class DeleteUserUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
+    private final cart.ai.shopping.domain.ports.storage.StoragePort storagePort;
 
     public Result<User> execute(UserId userId) {
         User user = userRepositoryPort.findByUserId(userId);
 
         if (user == null) {
-            return Result.error(HttpStatus.NOT_FOUND.value());
+            return Result.error(NOT_FOUND);
         }
 
         userRepositoryPort.delete(userId);
+
+        if (user.avatarFileId() != null) {
+            storagePort.deleteFile(user.avatarFileId());
+        }
 
         return Result.success(user);
     }

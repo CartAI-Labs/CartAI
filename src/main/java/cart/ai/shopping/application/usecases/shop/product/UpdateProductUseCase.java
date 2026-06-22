@@ -12,7 +12,8 @@ import cart.ai.shopping.domain.model.shop.Product;
 import cart.ai.shopping.domain.model.shop.vos.ProductId;
 import cart.ai.shopping.domain.ports.shop.ProductRepositoryPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+
+import static cart.ai.shopping.domain.common.result.ResultError.INTERNAL_ERROR;
 
 /**
  * @author Roberto Díaz
@@ -24,13 +25,13 @@ public class UpdateProductUseCase {
     private final ProductRepositoryPort productRepositoryPort;
 
     public Result<Product> execute(UpdateProductCommand command) {
-        Product product = new Product(new ProductId(command.id()), command.name(), command.description(), command.price(), command.stock());
+        Product product = new Product(new ProductId(command.id()), command.name(), command.description(), command.price(), command.stock(), command.imageFileIds());
 
         if (isUpdatableProduct(product)) {
             return Result.success(productRepositoryPort.save(product));
         }
 
-        return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return Result.error(INTERNAL_ERROR);
     }
 
     private boolean isUpdatableProduct(Product product) {

@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Roberto Díaz
@@ -27,6 +28,8 @@ public record CreateProductRestRequest(
 
         @NotNull(message = "Stock is mandatory")
         @PositiveOrZero
-        Integer stock
+        Integer stock,
+
+        List<String> imageFileIds
 ) {
 }

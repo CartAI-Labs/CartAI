@@ -8,6 +8,7 @@ package cart.ai.shopping.infrastructure.in.rest.shop.dtos;
 import cart.ai.shopping.domain.model.shop.vos.ProductId;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Roberto Díaz
@@ -17,6 +18,7 @@ public record ProductRestResponse(
         String name,
         String description,
         BigDecimal price,
-        Integer stock
+        Integer stock,
+        List<String> imageFileIds
 ) {
 }

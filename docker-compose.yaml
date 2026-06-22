@@ -1,5 +1,5 @@
 services:
-  # MongoDB
+  # MongoDB (Replica Set for transaction support)
   mongodb:
     image: mongo:latest
     container_name: cartai-mongodb
@@ -7,6 +7,13 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    command: [ "--replSet", "rs0" ]
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'localhost:27017'}]}) }" | mongosh --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
 
   # Apache Kafka (KRaft mode, no Zookeeper)
   kafka:
@@ -28,5 +35,20 @@ services:
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
 
+  # MinIO (S3 Compatible Storage)
+  minio:
+    image: minio/minio:latest
+    container_name: cartai-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
 volumes:
   mongo_data:
+  minio_data:

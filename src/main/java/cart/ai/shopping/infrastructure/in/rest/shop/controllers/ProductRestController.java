@@ -8,6 +8,7 @@ package cart.ai.shopping.infrastructure.in.rest.shop.controllers;
 import cart.ai.shopping.application.usecases.shop.product.*;
 import cart.ai.shopping.domain.common.result.Result;
 import cart.ai.shopping.domain.model.shop.Product;
+import cart.ai.shopping.infrastructure.in.rest.common.ResultErrorHttpStatusMapper;
 import cart.ai.shopping.infrastructure.in.rest.shop.dtos.CreateProductRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.shop.dtos.ProductRestResponse;
 import cart.ai.shopping.infrastructure.in.rest.shop.dtos.UpdateProductRestRequest;
@@ -15,6 +16,7 @@ import cart.ai.shopping.infrastructure.in.rest.shop.mappers.ProductRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,39 +36,43 @@ public class ProductRestController {
     private final UpdateProductUseCase updateProductUseCase;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('VENDOR', 'ADMIN')")
     public ResponseEntity<?> createProduct(@RequestBody @Valid CreateProductRestRequest request) {
         Result<Product> result = createProductUseCase.execute(ProductRestMapper.toCreateProductCommand(request));
 
         if (result.hasError()) {
-            return ResponseEntity.status(result.getErrorCode()).body("Error.");
+            return ResponseEntity.status(ResultErrorHttpStatusMapper.toHttpStatus(result.getError())).body("Error.");
         }
 
         return ResponseEntity.ok(ProductRestMapper.toResponse(result.getValue()));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'VENDOR', 'ADMIN')")
     public ResponseEntity<?> getProductById(@PathVariable String id) {
         Result<Product> result = getProductUseCase.execute(id);
 
         if (result.hasError()) {
-            return ResponseEntity.status(result.getErrorCode()).body("Not found.");
+            return ResponseEntity.status(ResultErrorHttpStatusMapper.toHttpStatus(result.getError())).body("Not found.");
         }
 
         return ResponseEntity.ok(ProductRestMapper.toResponse(result.getValue()));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('VENDOR', 'ADMIN')")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         Result<Product> result = deleteProductUseCase.execute(id);
 
         if (result.hasError()) {
-            return ResponseEntity.status(result.getErrorCode()).body("Could not delete");
+            return ResponseEntity.status(ResultErrorHttpStatusMapper.toHttpStatus(result.getError())).body("Could not delete");
         }
 
         return ResponseEntity.ok(ProductRestMapper.toResponse(result.getValue()));
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'VENDOR', 'ADMIN')")
     public ResponseEntity<?> getProducts() {
         Result<List<Product>> result = listProductUseCase.execute();
 
@@ -77,11 +83,12 @@ public class ProductRestController {
     }
 
     @PutMapping()
+    @PreAuthorize("hasAnyRole('VENDOR', 'ADMIN')")
     public ResponseEntity<?> putProduct(@RequestBody @Valid UpdateProductRestRequest request) {
         Result<Product> result = updateProductUseCase.execute(ProductRestMapper.toUpdateProductCommand(request));
 
         if (result.hasError()) {
-            return ResponseEntity.status(result.getErrorCode()).body("Error.");
+            return ResponseEntity.status(ResultErrorHttpStatusMapper.toHttpStatus(result.getError())).body("Error.");
         }
 
         return ResponseEntity.ok(ProductRestMapper.toResponse(result.getValue()));

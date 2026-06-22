@@ -94,6 +94,20 @@ graph TD
 * Authenticated endpoints using **JSON Web Tokens (JWT)**.
 * Password hashing using **BCrypt** through an outgoing port.
 * Sub-domain architecture support for security including roles (e.g. `User`, `Role`, `Permission`).
+* **Role-Based Access Control (RBAC):** `@PreAuthorize` annotations enforce that `CUSTOMER` users can only operate on
+  their own resources, while `ADMIN` has global access across all domains.
+
+### 2. MinIO / S3 Object Storage with Two-Phase Upload
+
+* Product images, user avatars, and customer media are stored and retrieved using **MinIO** (S3-compatible).
+* A **Two-Phase Upload** flow is implemented for user avatars:
+  1. The client uploads the file to a **temporary bucket** (no authentication required). The temporary bucket enforces a
+     **TTL lifecycle rule** (1 day) via S3 Lifecycle Configuration, ensuring orphaned files are automatically cleaned
+     up.
+  2. Upon successful user registration, the avatar is **promoted** to the permanent bucket by the `CreateUserUseCase`.
+* Avatar uploads enforce a strict **2MB file size limit** and **image content-type validation** at the controller level.
+* Rate limiting for public upload endpoints is delegated to the infrastructure/web server layer (e.g. Nginx, API
+  Gateway).
 
 ### 2. Transactional Outbox Pattern
 
@@ -185,20 +199,27 @@ src/main/java/cart/ai/shopping/
 
 ## 🔮 Future Roadmap
 
-- [ ] **MinIO / S3 Storage Integration:**
-  - Support storing and retrieving product, user, and customer images using an S3-compatible service (MinIO).
+- [x] **MinIO / S3 Storage Integration:**
+  - Storing and retrieving product, user, and customer images using MinIO (S3-compatible) with Two-Phase Upload for
+    avatars.
+- [ ] **Email Verification on Registration:**
+  - Upon public registration, users are created in a `PENDING_VERIFICATION` state without the `CUSTOMER` role.
+  - A time-limited, single-use verification token is sent by email.
+  - Upon token validation, the user is activated and assigned the `CUSTOMER` role.
+  - A scheduled job purges unverified accounts older than 48 hours to prevent database pollution.
+  - A CAPTCHA (e.g. reCAPTCHA v3 or Cloudflare Turnstile) is validated server-side before any data is persisted to
+    prevent bot-driven mass registration.
+- [ ] **Comprehensive Testing Suite:**
+  - **Unit:** Mockito-based tests for all UseCases, covering business validations and Two-Phase Upload promotion logic.
+  - **Integration (E2E):** MockMvc-based `*FlowIT` tests for all 4 domains (`identity`, `storage`, `cart`, `order`),
+    using `@WithMockUser` to verify `200 OK` (authorized) and `403 Forbidden` (unauthorized) scenarios.
 - [ ] **React Frontend Application:**
     - Build a modern user interface using React, TypeScript, and Vite.
-    - Leverage HSL-tailored designs, subtle animations, and fully responsive grids for product listing, cart checkout,
-      and customer dashboards.
+  - Leverage HSL-tailored designs, subtle animations, and fully responsive grids for product listing, cart checkout, and
+    customer dashboards.
 - [ ] **Dockerization & Orchestration:**
     - Containerize the Spring Boot backend, the React frontend, MongoDB, and Apache Kafka.
     - Provide a single `docker-compose.yml` to spin up the entire local development environment instantly.
 - [ ] **AWS Cloud Deployment:**
     - Set up secure infrastructure on AWS (EC2/ECS, DocumentDB for Mongo, MSK for Kafka).
     - Implement TLS/SSL security and SASL/SCRAM authentication for Apache Kafka.
-- [ ] **Comprehensive Testing Suite:**
-    - **Unit & Integration:** JUnit 5, Mockito, and Testcontainers to spin up isolated MongoDB/Kafka instances for
-      integration testing.
-    - **End-to-End (E2E) / Functional:** Write automated UI and API workflow tests using Playwright.
-

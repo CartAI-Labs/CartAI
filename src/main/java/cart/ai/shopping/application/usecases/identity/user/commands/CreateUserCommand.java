@@ -26,7 +26,9 @@ public record CreateUserCommand(
         String password,
 
         @NotNull
-        Set<Role> roles
+        Set<Role> roles,
+
+        String avatarFileId
 
 ) {
 }

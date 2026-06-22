@@ -10,6 +10,10 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Roberto Díaz
@@ -27,6 +31,7 @@ public class Product {
     private BigDecimal price;
     @NonNull
     private Integer stock;
+    private List<String> imageFileIds = new ArrayList<>();
 
     public Product(@NonNull ProductId id, @NonNull String name, @NonNull String description, @NonNull BigDecimal price, @NonNull Integer stock) {
         this.id = id;
@@ -34,6 +39,33 @@ public class Product {
         this.name = name;
         this.price = price;
         this.stock = stock;
+    }
+
+    public Product(@NonNull ProductId id, @NonNull String name, @NonNull String description, @NonNull BigDecimal price, @NonNull Integer stock, List<String> imageFileIds) {
+        this(id, name, description, price, stock);
+        if (imageFileIds != null) {
+            this.imageFileIds.addAll(imageFileIds);
+        }
+    }
+
+    public void addImage(String fileId) {
+        this.imageFileIds.add(fileId);
+    }
+
+    public void setMainImage(String fileId) {
+        if (this.imageFileIds.remove(fileId)) {
+            this.imageFileIds.addFirst(fileId);
+        } else {
+            throw new IllegalArgumentException("Image not found in product");
+        }
+    }
+
+    public Optional<String> getMainImageId() {
+        return this.imageFileIds.isEmpty() ? Optional.empty() : Optional.of(this.imageFileIds.get(0));
+    }
+
+    public List<String> getGalleryImages() {
+        return Collections.unmodifiableList(this.imageFileIds);
     }
 
     public void increaseStock(Integer count) {

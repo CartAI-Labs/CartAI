@@ -21,7 +21,9 @@ public record RegisterRestRequest(
         String email,
 
         @NotBlank(message = "Password is mandatory")
-        String password
+        String password,
+
+        String avatarFileId
 
 ) {
 }
