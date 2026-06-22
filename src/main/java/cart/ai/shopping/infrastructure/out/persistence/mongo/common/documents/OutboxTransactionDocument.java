@@ -23,6 +23,8 @@ public class OutboxTransactionDocument {
     public static final int SUCCESS = 1;
     public static final int FAIL = 2;
     public static final int PROCESSING = 3;
+    public static final int DEAD = 4;
+    public static final int MAX_RETRIES = 5;
     @Id
     private final String id;
     private String aggregateType;
@@ -31,5 +33,7 @@ public class OutboxTransactionDocument {
     private String topic;
     private String payload;
     private int status;
+    private int retryCount;
     private Date createdDate;
+    private Date lastAttemptDate;
 }

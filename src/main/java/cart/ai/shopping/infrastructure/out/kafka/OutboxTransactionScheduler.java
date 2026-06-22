@@ -16,6 +16,10 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
 /**
  * @author Roberto Díaz
  */
@@ -24,14 +28,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OutboxTransactionScheduler {
 
+    private static final long STUCK_THRESHOLD_MINUTES = 5;
+
     private final MongoTemplate mongoTemplate;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    @Scheduled(fixedDelay = 1000) // Se ejecuta cada segundo
+    @Scheduled(fixedDelay = 1000)
     public void processOutbox() {
-        Query query = new Query(Criteria.where("status").is(OutboxTransactionDocument.PENDING));
+        Query query = new Query(Criteria.where("status")
+                .in(OutboxTransactionDocument.PENDING, OutboxTransactionDocument.FAIL)
+                .andOperator(Criteria.where("retryCount").lt(OutboxTransactionDocument.MAX_RETRIES)));
 
-        Update update = Update.update("status", OutboxTransactionDocument.PROCESSING);
+        Update update = Update.update("status", OutboxTransactionDocument.PROCESSING)
+                .set("lastAttemptDate", new Date())
+                .inc("retryCount", 1);
 
         OutboxTransactionDocument event;
 
@@ -41,22 +51,45 @@ public class OutboxTransactionScheduler {
             kafkaTemplate.send(event.getTopic(), event.getKey(), event.getPayload())
                     .whenComplete((result, throwable) -> {
                         if (throwable == null) {
-                            Query updateQuery = new Query(Criteria.where("id").is(curEvent.getId()));
-                            mongoTemplate.updateFirst(
-                                    updateQuery,
-                                    Update.update(
-                                            "status", OutboxTransactionDocument.SUCCESS), OutboxTransactionDocument.class);
+                            updateStatus(curEvent.getId(), OutboxTransactionDocument.SUCCESS);
                         } else {
-                            log.error("Error handling outbox event {}", curEvent.getId(), throwable);
-
-                            Query updateQuery = new Query(Criteria.where("id").is(curEvent.getId()));
-
-                            mongoTemplate.updateFirst(
-                                    updateQuery,
-                                    Update.update(
-                                            "status", OutboxTransactionDocument.FAIL), OutboxTransactionDocument.class);
+                            log.error("Error handling outbox event {} (attempt {})",
+                                    curEvent.getId(), curEvent.getRetryCount() + 1, throwable);
+                            updateStatus(curEvent.getId(), OutboxTransactionDocument.FAIL);
                         }
                     });
         }
+
+        // Mark events that exhausted retries as DEAD
+        Query exhaustedQuery = new Query(Criteria.where("status")
+                .is(OutboxTransactionDocument.FAIL)
+                .and("retryCount").gte(OutboxTransactionDocument.MAX_RETRIES));
+
+        Update deadUpdate = Update.update("status", OutboxTransactionDocument.DEAD);
+        mongoTemplate.updateMulti(exhaustedQuery, deadUpdate, OutboxTransactionDocument.class);
+    }
+
+    @Scheduled(fixedDelay = 60000)
+    public void recoverStuckEvents() {
+        Date threshold = Date.from(Instant.now().minus(STUCK_THRESHOLD_MINUTES, ChronoUnit.MINUTES));
+
+        Query stuckQuery = new Query(Criteria.where("status")
+                .is(OutboxTransactionDocument.PROCESSING)
+                .and("lastAttemptDate").lt(threshold));
+
+        Update resetUpdate = Update.update("status", OutboxTransactionDocument.PENDING);
+
+        long count = mongoTemplate.updateMulti(stuckQuery, resetUpdate, OutboxTransactionDocument.class).getModifiedCount();
+
+        if (count > 0) {
+            log.warn("Recovered {} stuck outbox events back to PENDING", count);
+        }
+    }
+
+    private void updateStatus(String eventId, int status) {
+        Query updateQuery = new Query(Criteria.where("id").is(eventId));
+        mongoTemplate.updateFirst(updateQuery,
+                Update.update("status", status), OutboxTransactionDocument.class);
     }
 }
+
