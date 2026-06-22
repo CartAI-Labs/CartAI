@@ -80,7 +80,7 @@ public class AuthRestController {
         if (role == null) {
             Result<Role> result = createRoleUseCase.execute(new CreateRoleCommand(
                     "CUSTOMER",
-                    Set.of("WRITE_ORDERS", "READ_ORDERS", "WRITE_CARTS", "READ_CARTS")
+                    Set.of("WRITE_ORDERS", "READ_ORDERS", "WRITE_CARTS", "READ_CARTS", "WRITE_IMAGE")
             ));
             if (result.hasError()) {
                 throw new IllegalStateException("Could not create CUSTOMER role");
@@ -93,6 +93,7 @@ public class AuthRestController {
 
     private String generateTokenForUser(User user) {
         Map<String, Object> extraClaims = Map.of(
+                "userId", user.userId().value(),
                 "roles", user.roles().stream().map(Role::name).toList(),
                 "permissions", user.roles().stream()
                         .flatMap(role -> role.permissions().stream())

@@ -7,16 +7,14 @@ package cart.ai.shopping.domain.ports.storage;
 
 import cart.ai.shopping.domain.model.storage.StoredFile;
 
-import java.io.InputStream;
-
 /**
  * @author Roberto Díaz
  */
-public interface StoragePort {
+public interface StoredFileRepositoryPort {
 
-    StoredFile uploadFile(InputStream inputStream, String fileName, String contentType, long contentLength);
+    StoredFile save(StoredFile storedFile);
 
-    InputStream downloadFile(String fileName);
+    StoredFile findByFileName(String fileName);
 
-    void deleteFile(String fileName);
+    void deleteByFileName(String fileName);
 }

@@ -5,7 +5,7 @@
 
 package cart.ai.shopping.infrastructure.out.storage;
 
-import cart.ai.shopping.domain.model.storage.vos.StoredFile;
+import cart.ai.shopping.domain.model.storage.StoredFile;
 import cart.ai.shopping.domain.ports.storage.StoragePort;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class MinIOStorageAdapter implements StoragePort {
 
             String fileUrl = String.format("%s/%s/%s", minioEndpoint, bucketName, fileName);
 
-            return new StoredFile(fileUrl, fileName, contentType);
+            return new StoredFile("", fileName, fileUrl, contentType, null);
         } catch (Exception e) {
             throw new RuntimeException("Error uploading file to MinIO: " + e.getMessage(), e);
         }

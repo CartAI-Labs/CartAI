@@ -6,8 +6,16 @@
 package cart.ai.shopping.application.usecases.storage;
 
 import cart.ai.shopping.application.annotations.UseCase;
+import cart.ai.shopping.application.usecases.storage.commands.DeleteFileCommand;
+import cart.ai.shopping.domain.common.result.Result;
+import cart.ai.shopping.domain.model.identity.User;
+import cart.ai.shopping.domain.model.identity.vos.UserId;
+import cart.ai.shopping.domain.model.storage.StoredFile;
+import cart.ai.shopping.domain.ports.identity.UserRepositoryPort;
 import cart.ai.shopping.domain.ports.storage.StoragePort;
+import cart.ai.shopping.domain.ports.storage.StoredFileRepositoryPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author Roberto Díaz
@@ -17,10 +25,47 @@ import lombok.RequiredArgsConstructor;
 public class DeleteFileUseCase {
 
     private final StoragePort storagePort;
+    private final StoredFileRepositoryPort storedFileRepositoryPort;
+    private final UserRepositoryPort userRepositoryPort;
 
-    public void execute(String fileName) {
-        if (fileName != null && !fileName.isBlank()) {
+    public Result<Void> execute(DeleteFileCommand command) {
+        if (command == null || command.fileName().isBlank()) {
+            return Result.error(HttpStatus.BAD_REQUEST.value());
+        }
+
+        User requester = userRepositoryPort.findByUserId(new UserId(command.requesterUserId()));
+        if (requester == null) {
+            return Result.error(HttpStatus.UNAUTHORIZED.value());
+        }
+
+        String fileName = command.fileName();
+        StoredFile storedFile = storedFileRepositoryPort.findByFileName(fileName);
+        if (storedFile == null) {
+            return Result.error(HttpStatus.NOT_FOUND.value());
+        }
+
+        boolean isAdmin = requester.roles().stream()
+                .anyMatch(role -> role.name().equals("ADMIN"));
+
+        if (storedFile.ownerId() != null) {
+            if (!storedFile.ownerId().equals(command.requesterUserId()) && !isAdmin) {
+                return Result.error(HttpStatus.FORBIDDEN.value());
+            }
+        } else {
+            boolean hasWritePermission = requester.roles().stream()
+                    .flatMap(role -> role.permissions().stream())
+                    .anyMatch(permission -> permission.value().equals("WRITE_PRODUCTS"));
+            if (!hasWritePermission && !isAdmin) {
+                return Result.error(HttpStatus.FORBIDDEN.value());
+            }
+        }
+
+        try {
             storagePort.deleteFile(fileName);
+            storedFileRepositoryPort.deleteByFileName(fileName);
+            return Result.success(null);
+        } catch (Exception e) {
+            return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 }
