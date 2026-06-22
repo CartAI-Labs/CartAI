@@ -2,3 +2,28 @@ cartai:
   database:
     counters:
       offset: 999
+  bootstrap:
+    enabled: true
+    roles:
+      ADMIN:
+        - ROLE_ADMIN
+        - READ_USERS
+        - WRITE_USERS
+      CUSTOMER:
+        - ROLE_CUSTOMER
+      VENDOR:
+        - ROLE_VENDOR
+        - MANAGE_PRODUCTS
+    user:
+      admin:
+        name: ${ADMIN_NAME:cartai}
+        email: ${ADMIN_EMAIL:cartai@cartai.com}
+        password: ${ADMIN_PASSWORD:cartai}
+      customer:
+        name: ${CUSTOMER_NAME:customer}
+        email: ${CUSTOMER_EMAIL:customer@cartai.com}
+        password: ${CUSTOMER_PASSWORD:customer}
+      vendor:
+        name: ${VENDOR_NAME:vendor}
+        email: ${VENDOR_EMAIL:vendor@cartai.com}
+        password: ${VENDOR_PASSWORD:vendor}
