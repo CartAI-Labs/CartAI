@@ -85,7 +85,7 @@ public class UserAvatarRestController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('WRITE_USERS') or principal.username == #id")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('WRITE_USERS') or principal == #id")
     public ResponseEntity<?> updateAvatar(@PathVariable String id, @RequestParam("file") MultipartFile file) {
         ResponseEntity<String> validation = validate(file);
 

@@ -80,8 +80,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             .toList());
                 }
 
+                String userId = jwtService.extractClaim(jwt, claims -> claims.get("userId", String.class));
+                
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userEmail,
+                        userId != null ? userId : userEmail, // Use userId as principal, fallback to email if not present
                         null,
                         authorities
                 );
