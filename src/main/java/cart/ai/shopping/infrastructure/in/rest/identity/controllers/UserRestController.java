@@ -106,7 +106,15 @@ public class UserRestController {
             return ResponseEntity.badRequest().body("ID mismatch");
         }
 
-        Result<User> result = updateUserUseCase.execute(UserRestMapper.toUpdateUserCommand(request));
+        Set<Role> roles = request.roles().stream()
+                .map(roleRepositoryPort::findByName)
+                .collect(Collectors.toSet());
+
+        if (roles.contains(null)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One or more roles do not exist.");
+        }
+
+        Result<User> result = updateUserUseCase.execute(UserRestMapper.toUpdateUserCommand(request, roles));
 
         if (result.hasError()) {
             return ResponseEntity.status(ResultErrorHttpStatusMapper.toHttpStatus(result.getError())).body("Could not update user.");

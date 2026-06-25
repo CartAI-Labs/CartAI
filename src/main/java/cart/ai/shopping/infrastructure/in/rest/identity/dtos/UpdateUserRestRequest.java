@@ -5,7 +5,6 @@
 
 package cart.ai.shopping.infrastructure.in.rest.identity.dtos;
 
-import cart.ai.shopping.domain.model.identity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +26,7 @@ public record UpdateUserRestRequest(
         String email,
 
         @NotNull
-        Set<Role> roles,
+        Set<String> roles,
 
         String avatarFileId
 ) {
