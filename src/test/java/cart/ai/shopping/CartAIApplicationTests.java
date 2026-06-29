@@ -5,20 +5,17 @@
 
 package cart.ai.shopping;
 
-import cart.ai.shopping.infrastructure.config.TestStorageConfig;
+import cart.ai.shopping.infrastructure.in.rest.BaseFlowIT;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
 /**
+ * Smoke test that verifies the Spring application context loads successfully.
+ *
  * @author Roberto Díaz
  */
-@SpringBootTest
-@Import(TestStorageConfig.class)
-class CartAIApplicationTests {
+class CartAIApplicationTests extends BaseFlowIT {
 
     @Test
     void contextLoads() {
     }
-
 }

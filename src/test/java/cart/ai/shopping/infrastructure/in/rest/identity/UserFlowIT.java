@@ -5,21 +5,15 @@
 
 package cart.ai.shopping.infrastructure.in.rest.identity;
 
-import cart.ai.shopping.infrastructure.config.TestStorageConfig;
-import cart.ai.shopping.infrastructure.in.rest.identity.dtos.LoginRestRequest;
+import cart.ai.shopping.infrastructure.in.rest.BaseFlowIT;
 import cart.ai.shopping.infrastructure.in.rest.identity.dtos.RegisterRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.identity.dtos.UpdateUserRestRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Set;
@@ -32,82 +26,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for User management endpoints.
  * <p>
- * Strategy: Each role block performs a real login to obtain a JWT token,
- * then uses that token in subsequent requests — testing both authentication
- * and authorization in a realistic end-to-end flow.
+ * Extends {@link BaseFlowIT} to reuse shared infrastructure and JWT session helpers.
+ * Each role block performs a real login to verify the full auth flow.
  * <p>
  * Roles tested: ADMIN, VENDOR, CUSTOMER
  *
  * @author Roberto Díaz
  */
-@SpringBootTest
-@AutoConfigureMockMvc
-@Import(TestStorageConfig.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class UserFlowIT {
+class UserFlowIT extends BaseFlowIT {
 
-    // Credentials seeded by bootstrap (see test/resources/application.properties)
-    private static final String ADMIN_EMAIL = "admin@test.com";
-    private static final String ADMIN_PASS = "adminpass";
-    private static final String VENDOR_EMAIL = "vendor@test.com";
-    private static final String VENDOR_PASS = "vendorpass";
-    private static final String CUSTOMER_EMAIL = "customer@test.com";
-    private static final String CUSTOMER_PASS = "customerpass";
-    // Shared state across tests — tokens and IDs obtained during login/register
-    private static String adminToken;
-    private static String adminUserId;
-    private static String vendorToken;
-    private static String vendorUserId;
-    private static String customerToken;
-    private static String customerUserId;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    /**
-     * Ensures admin is logged in — safe to call multiple times.
-     */
-    private void ensureAdminLoggedIn() throws Exception {
-        if (adminToken != null) return;
-        LoginRestRequest req = new LoginRestRequest(ADMIN_EMAIL, ADMIN_PASS);
-        MvcResult result = mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk()).andReturn();
-        var response = objectMapper.readTree(result.getResponse().getContentAsString());
-        adminToken = response.get("token").asText();
-        adminUserId = response.get("userId").asText();
-    }
-
-    /**
-     * Ensures vendor is logged in — safe to call multiple times.
-     */
-    private void ensureVendorLoggedIn() throws Exception {
-        if (vendorToken != null) return;
-        LoginRestRequest req = new LoginRestRequest(VENDOR_EMAIL, VENDOR_PASS);
-        MvcResult result = mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk()).andReturn();
-        var response = objectMapper.readTree(result.getResponse().getContentAsString());
-        vendorToken = response.get("token").asText();
-        vendorUserId = response.get("userId").asText();
-    }
-
-    /**
-     * Ensures customer is logged in — safe to call multiple times.
-     */
-    private void ensureCustomerLoggedIn() throws Exception {
-        if (customerToken != null) return;
-        LoginRestRequest req = new LoginRestRequest(CUSTOMER_EMAIL, CUSTOMER_PASS);
-        MvcResult result = mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk()).andReturn();
-        var response = objectMapper.readTree(result.getResponse().getContentAsString());
-        customerToken = response.get("token").asText();
-        customerUserId = response.get("userId").asText();
+    @AfterAll
+    void tearDown() {
+        // Remove users created by this IT that are not bootstrap users.
+        // The vendor name change is left as-is since bootstrap users are reset on next test run.
+        removeTestUsers("newcustomer@test.com", "disposable@test.com");
     }
 
     // =========================================================================
@@ -117,11 +50,10 @@ class UserFlowIT {
     @Test
     @Order(1)
     void adminCanLoginSuccessfully() throws Exception {
-        LoginRestRequest request = new LoginRestRequest(ADMIN_EMAIL, ADMIN_PASS);
-
         MvcResult result = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(
+                                new cart.ai.shopping.infrastructure.in.rest.identity.dtos.LoginRestRequest(ADMIN_EMAIL, ADMIN_PASS))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isNotEmpty())
                 .andExpect(jsonPath("$.userId").isNotEmpty())
@@ -148,8 +80,6 @@ class UserFlowIT {
     void adminCanGetAnyUser() throws Exception {
         ensureAdminLoggedIn();
         ensureVendorLoggedIn();
-
-        // Admin fetches vendor profile
         mockMvc.perform(get("/api/users/" + vendorUserId)
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk())
@@ -161,11 +91,9 @@ class UserFlowIT {
     void adminCanUpdateAnyUser() throws Exception {
         ensureAdminLoggedIn();
         ensureVendorLoggedIn();
-
         UpdateUserRestRequest request = new UpdateUserRestRequest(
                 vendorUserId, "Updated Vendor Name", VENDOR_EMAIL, Set.of("VENDOR"), null
         );
-
         mockMvc.perform(put("/api/users/" + vendorUserId)
                         .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -181,22 +109,18 @@ class UserFlowIT {
     @Test
     @Order(5)
     void vendorCanLoginSuccessfully() throws Exception {
-        ensureVendorLoggedIn();
-        // Re-login to get fresh token and assert response
-        vendorToken = null;
-        LoginRestRequest request = new LoginRestRequest(VENDOR_EMAIL, VENDOR_PASS);
-
-        MvcResult result = mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isNotEmpty())
-                .andExpect(jsonPath("$.roles", hasItem("VENDOR")))
-                .andReturn();
-
-        var response = objectMapper.readTree(result.getResponse().getContentAsString());
+        vendorToken = null; // Force re-login to assert the login response
+        var response = login(VENDOR_EMAIL, VENDOR_PASS);
         vendorToken = response.get("token").asText();
         vendorUserId = response.get("userId").asText();
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new cart.ai.shopping.infrastructure.in.rest.identity.dtos.LoginRestRequest(VENDOR_EMAIL, VENDOR_PASS))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andExpect(jsonPath("$.roles", hasItem("VENDOR")));
     }
 
     @Test
@@ -216,7 +140,6 @@ class UserFlowIT {
         UpdateUserRestRequest request = new UpdateUserRestRequest(
                 vendorUserId, "Vendor Self Update", VENDOR_EMAIL, Set.of("VENDOR"), null
         );
-
         mockMvc.perform(put("/api/users/" + vendorUserId)
                         .header("Authorization", "Bearer " + vendorToken)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -264,41 +187,30 @@ class UserFlowIT {
         RegisterRestRequest request = new RegisterRestRequest(
                 "New Customer", "newcustomer@test.com", "password123", null
         );
-
-        MvcResult result = mockMvc.perform(post("/api/auth/register")
+        mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isNotEmpty())
                 .andExpect(jsonPath("$.userId").isNotEmpty())
-                .andExpect(jsonPath("$.roles", hasItem("CUSTOMER")))
-                .andReturn();
-
-        var response = objectMapper.readTree(result.getResponse().getContentAsString());
-        customerToken = response.get("token").asText();
-        customerUserId = response.get("userId").asText();
+                .andExpect(jsonPath("$.roles", hasItem("CUSTOMER")));
     }
 
     @Test
     @Order(12)
     void customerCanLoginSuccessfully() throws Exception {
-        ensureCustomerLoggedIn();
-        // Re-login to get fresh token and assert response
-        customerToken = null;
-        LoginRestRequest request = new LoginRestRequest(CUSTOMER_EMAIL, CUSTOMER_PASS);
-
-        MvcResult result = mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isNotEmpty())
-                .andExpect(jsonPath("$.roles", hasItem("CUSTOMER")))
-                .andReturn();
-
-        // Refresh customerToken and ID to the seeded customer for remaining tests
-        var response = objectMapper.readTree(result.getResponse().getContentAsString());
+        customerToken = null; // Force re-login to assert the login response
+        var response = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
         customerToken = response.get("token").asText();
         customerUserId = response.get("userId").asText();
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new cart.ai.shopping.infrastructure.in.rest.identity.dtos.LoginRestRequest(CUSTOMER_EMAIL, CUSTOMER_PASS))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andExpect(jsonPath("$.roles", hasItem("CUSTOMER")));
     }
 
     @Test
@@ -318,7 +230,6 @@ class UserFlowIT {
         UpdateUserRestRequest request = new UpdateUserRestRequest(
                 customerUserId, "Customer Self Update", CUSTOMER_EMAIL, Set.of("CUSTOMER"), null
         );
-
         mockMvc.perform(put("/api/users/" + customerUserId)
                         .header("Authorization", "Bearer " + customerToken)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -354,7 +265,6 @@ class UserFlowIT {
         UpdateUserRestRequest request = new UpdateUserRestRequest(
                 adminUserId, "Hacked Name", ADMIN_EMAIL, Set.of("ADMIN"), null
         );
-
         mockMvc.perform(put("/api/users/" + adminUserId)
                         .header("Authorization", "Bearer " + customerToken)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -376,14 +286,20 @@ class UserFlowIT {
     @Order(19)
     void customerCanLogout() throws Exception {
         ensureCustomerLoggedIn();
+        String tokenToInvalidate = customerToken;
+        String userIdAtLogout = customerUserId;
+
         mockMvc.perform(post("/api/auth/logout")
-                        .header("Authorization", "Bearer " + customerToken))
+                        .header("Authorization", "Bearer " + tokenToInvalidate))
                 .andExpect(status().isOk());
 
-        // After logout, the token should be blacklisted — requests must be rejected
-        mockMvc.perform(get("/api/users/" + customerUserId)
-                        .header("Authorization", "Bearer " + customerToken))
+        // After logout the token must be blacklisted
+        mockMvc.perform(get("/api/users/" + userIdAtLogout)
+                        .header("Authorization", "Bearer " + tokenToInvalidate))
                 .andExpect(status().isForbidden());
+
+        // Reset so subsequent ITs can re-authenticate as CUSTOMER with a fresh token
+        invalidateCustomerSession();
     }
 
     // =========================================================================
@@ -394,7 +310,6 @@ class UserFlowIT {
     @Order(20)
     void adminCanDeleteUser() throws Exception {
         ensureAdminLoggedIn();
-        // Create a disposable user to delete
         RegisterRestRequest register = new RegisterRestRequest(
                 "Disposable User", "disposable@test.com", "pass123", null
         );
@@ -407,12 +322,10 @@ class UserFlowIT {
         String disposableId = objectMapper.readTree(result.getResponse().getContentAsString())
                 .get("userId").asText();
 
-        // Admin deletes the disposable user
         mockMvc.perform(delete("/api/users/" + disposableId)
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk());
 
-        // Verify the user no longer exists
         mockMvc.perform(get("/api/users/" + disposableId)
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isNotFound());
