@@ -42,6 +42,7 @@ public class JwtService {
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(username)
+                .id(java.util.UUID.randomUUID().toString())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey())
