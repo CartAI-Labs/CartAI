@@ -32,7 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 class UserIT extends BaseIT {
 
-    /** Tracks emails created during a test so @AfterEach can clean them up. */
+    /**
+     * Tracks emails created during a test so @AfterEach can clean them up.
+     */
     private final List<String> createdUserEmails = new ArrayList<>();
 
     @AfterEach
@@ -49,7 +51,9 @@ class UserIT extends BaseIT {
         return "Bearer " + token;
     }
 
-    /** Registers a new user and tracks their email for post-test cleanup. */
+    /**
+     * Registers a new user and tracks their email for post-test cleanup.
+     */
     private String registerAndTrack(String name, String email, String password) throws Exception {
         RegisterRestRequest req = new RegisterRestRequest(name, email, password, null);
         MvcResult result = mockMvc.perform(post("/api/auth/register")
@@ -132,8 +136,8 @@ class UserIT extends BaseIT {
 
     @Test
     void tokenIsBlacklistedAfterLogout() throws Exception {
-        var auth  = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
-        String token  = auth.get("token").asText();
+        var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
+        String token = auth.get("token").asText();
         String userId = auth.get("userId").asText();
 
         mockMvc.perform(post("/api/auth/logout")
@@ -181,8 +185,8 @@ class UserIT extends BaseIT {
 
     @Test
     void userCanGetOwnProfile() throws Exception {
-        var auth  = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
-        String token  = auth.get("token").asText();
+        var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
+        String token = auth.get("token").asText();
         String userId = auth.get("userId").asText();
 
         mockMvc.perform(get("/api/users/" + userId)
@@ -193,10 +197,10 @@ class UserIT extends BaseIT {
 
     @Test
     void adminCanGetAnyUsersProfile() throws Exception {
-        var adminAuth    = login(ADMIN_EMAIL, ADMIN_PASS);
+        var adminAuth = login(ADMIN_EMAIL, ADMIN_PASS);
         String adminToken = adminAuth.get("token").asText();
 
-        var vendorAuth  = login(VENDOR_EMAIL, VENDOR_PASS);
+        var vendorAuth = login(VENDOR_EMAIL, VENDOR_PASS);
         String vendorId = vendorAuth.get("userId").asText();
 
         mockMvc.perform(get("/api/users/" + vendorId)
@@ -207,10 +211,10 @@ class UserIT extends BaseIT {
 
     @Test
     void customerCannotGetAnotherUsersProfile() throws Exception {
-        var adminAuth  = login(ADMIN_EMAIL, ADMIN_PASS);
+        var adminAuth = login(ADMIN_EMAIL, ADMIN_PASS);
         String adminId = adminAuth.get("userId").asText();
 
-        var customerAuth    = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
+        var customerAuth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
         String customerToken = customerAuth.get("token").asText();
 
         mockMvc.perform(get("/api/users/" + adminId)
@@ -224,8 +228,8 @@ class UserIT extends BaseIT {
 
     @Test
     void userCanUpdateOwnProfile() throws Exception {
-        var auth  = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
-        String token  = auth.get("token").asText();
+        var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
+        String token = auth.get("token").asText();
         String userId = auth.get("userId").asText();
 
         UpdateUserRestRequest req = new UpdateUserRestRequest(
@@ -242,10 +246,10 @@ class UserIT extends BaseIT {
 
     @Test
     void adminCanUpdateAnyUsersProfile() throws Exception {
-        var adminAuth    = login(ADMIN_EMAIL, ADMIN_PASS);
+        var adminAuth = login(ADMIN_EMAIL, ADMIN_PASS);
         String adminToken = adminAuth.get("token").asText();
 
-        var vendorAuth  = login(VENDOR_EMAIL, VENDOR_PASS);
+        var vendorAuth = login(VENDOR_EMAIL, VENDOR_PASS);
         String vendorId = vendorAuth.get("userId").asText();
 
         UpdateUserRestRequest req = new UpdateUserRestRequest(
@@ -262,10 +266,10 @@ class UserIT extends BaseIT {
 
     @Test
     void customerCannotUpdateAnotherUsersProfile() throws Exception {
-        var adminAuth  = login(ADMIN_EMAIL, ADMIN_PASS);
+        var adminAuth = login(ADMIN_EMAIL, ADMIN_PASS);
         String adminId = adminAuth.get("userId").asText();
 
-        var customerAuth    = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
+        var customerAuth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
         String customerToken = customerAuth.get("token").asText();
 
         UpdateUserRestRequest req = new UpdateUserRestRequest(
@@ -279,15 +283,11 @@ class UserIT extends BaseIT {
                 .andExpect(status().isForbidden());
     }
 
-    // =========================================================================
-    // DELETE /api/users/{id}
-    // =========================================================================
-
     @Test
     void adminCanDeleteUser() throws Exception {
         String disposableId = registerAndTrack("Temp User", "temp-delete@test.com", "pass123");
 
-        var adminAuth    = login(ADMIN_EMAIL, ADMIN_PASS);
+        var adminAuth = login(ADMIN_EMAIL, ADMIN_PASS);
         String adminToken = adminAuth.get("token").asText();
 
         mockMvc.perform(delete("/api/users/" + disposableId)
@@ -304,10 +304,10 @@ class UserIT extends BaseIT {
 
     @Test
     void customerCannotDeleteAnotherUser() throws Exception {
-        var adminAuth  = login(ADMIN_EMAIL, ADMIN_PASS);
+        var adminAuth = login(ADMIN_EMAIL, ADMIN_PASS);
         String adminId = adminAuth.get("userId").asText();
 
-        var customerAuth    = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
+        var customerAuth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
         String customerToken = customerAuth.get("token").asText();
 
         mockMvc.perform(delete("/api/users/" + adminId)

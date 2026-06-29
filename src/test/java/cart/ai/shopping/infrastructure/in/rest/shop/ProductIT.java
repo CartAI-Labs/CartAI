@@ -40,7 +40,9 @@ class ProductIT extends BaseIT {
         return "Bearer " + token;
     }
 
-    /** Creates a product as vendor and returns its ID. */
+    /**
+     * Creates a product as vendor and returns its ID.
+     */
     private String createProductAsVendor(String name) throws Exception {
         var auth = login(VENDOR_EMAIL, VENDOR_PASS);
         CreateProductRestRequest req = new CreateProductRestRequest(
@@ -182,10 +184,6 @@ class ProductIT extends BaseIT {
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isForbidden());
     }
-
-    // =========================================================================
-    // DELETE /api/products/{id}
-    // =========================================================================
 
     @Test
     void vendorCanDeleteProduct() throws Exception {

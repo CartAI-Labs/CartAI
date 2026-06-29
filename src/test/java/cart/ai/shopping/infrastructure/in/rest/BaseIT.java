@@ -45,27 +45,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public abstract class BaseIT {
 
     // ── Seed credentials (populated by bootstrap on context startup) ──────────
-    protected static final String ADMIN_EMAIL    = "admin@test.com";
-    protected static final String ADMIN_PASS     = "adminpass";
-    protected static final String VENDOR_EMAIL   = "vendor@test.com";
-    protected static final String VENDOR_PASS    = "vendorpass";
+    protected static final String ADMIN_EMAIL = "admin@test.com";
+    protected static final String ADMIN_PASS = "adminpass";
+    protected static final String VENDOR_EMAIL = "vendor@test.com";
+    protected static final String VENDOR_PASS = "vendorpass";
     protected static final String CUSTOMER_EMAIL = "customer@test.com";
-    protected static final String CUSTOMER_PASS  = "customerpass";
+    protected static final String CUSTOMER_PASS = "customerpass";
 
     // ── Known collection names (must match @Document annotations) ─────────────
-    protected static final String COLLECTION_USERS    = "users";
+    protected static final String COLLECTION_USERS = "users";
     protected static final String COLLECTION_PRODUCTS = "products";
-    protected static final String COLLECTION_CART     = "cart";
-    protected static final String COLLECTION_ORDER    = "order";
+    protected static final String COLLECTION_CART = "cart";
+    protected static final String COLLECTION_ORDER = "order";
 
     // ── Emails that must never be removed ─────────────────────────────────────
     private static final List<String> PROTECTED_EMAILS = List.of(
             ADMIN_EMAIL, VENDOR_EMAIL, CUSTOMER_EMAIL
     );
 
-    @Autowired protected MockMvc mockMvc;
-    @Autowired protected ObjectMapper objectMapper;
-    @Autowired protected MongoTemplate mongoTemplate;
+    @Autowired
+    protected MockMvc mockMvc;
+    @Autowired
+    protected ObjectMapper objectMapper;
+    @Autowired
+    protected MongoTemplate mongoTemplate;
 
     // =========================================================================
     // Auth helper

@@ -51,7 +51,7 @@ class AvatarIT extends BaseIT {
     @Test
     void customerCanUploadOwnAvatar() throws Exception {
         var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
-        String token  = auth.get("token").asText();
+        String token = auth.get("token").asText();
         String userId = auth.get("userId").asText();
 
         mockMvc.perform(multipart(HttpMethod.PUT, "/api/users/avatar/" + userId)
@@ -64,7 +64,7 @@ class AvatarIT extends BaseIT {
     @Test
     void vendorCanUploadOwnAvatar() throws Exception {
         var auth = login(VENDOR_EMAIL, VENDOR_PASS);
-        String token  = auth.get("token").asText();
+        String token = auth.get("token").asText();
         String userId = auth.get("userId").asText();
 
         mockMvc.perform(multipart(HttpMethod.PUT, "/api/users/avatar/" + userId)
@@ -104,12 +104,12 @@ class AvatarIT extends BaseIT {
 
     @Test
     void adminCanUploadAvatarForAnyUser() throws Exception {
-        var adminAuth    = login(ADMIN_EMAIL, ADMIN_PASS);
+        var adminAuth = login(ADMIN_EMAIL, ADMIN_PASS);
         String adminToken = adminAuth.get("token").asText();
 
-        var customerAuth    = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
+        var customerAuth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
         String customerToken = customerAuth.get("token").asText();
-        String customerId    = customerAuth.get("userId").asText();
+        String customerId = customerAuth.get("userId").asText();
 
         // Act — admin uploads avatar for customer
         mockMvc.perform(multipart(HttpMethod.PUT, "/api/users/avatar/" + customerId)
@@ -134,7 +134,7 @@ class AvatarIT extends BaseIT {
         var adminAuth = login(ADMIN_EMAIL, ADMIN_PASS);
         String adminId = adminAuth.get("userId").asText();
 
-        var customerAuth    = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
+        var customerAuth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
         String customerToken = customerAuth.get("token").asText();
 
         mockMvc.perform(multipart(HttpMethod.PUT, "/api/users/avatar/" + adminId)
@@ -161,7 +161,7 @@ class AvatarIT extends BaseIT {
     @Test
     void uploadRejectsEmptyFile() throws Exception {
         var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
-        String token  = auth.get("token").asText();
+        String token = auth.get("token").asText();
         String userId = auth.get("userId").asText();
 
         MockMultipartFile emptyFile = new MockMultipartFile(
@@ -177,7 +177,7 @@ class AvatarIT extends BaseIT {
     @Test
     void uploadRejectsNonImageContentType() throws Exception {
         var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
-        String token  = auth.get("token").asText();
+        String token = auth.get("token").asText();
         String userId = auth.get("userId").asText();
 
         mockMvc.perform(multipart(HttpMethod.PUT, "/api/users/avatar/" + userId)
@@ -189,7 +189,7 @@ class AvatarIT extends BaseIT {
     @Test
     void uploadRejectsFileLargerThan2MB() throws Exception {
         var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
-        String token  = auth.get("token").asText();
+        String token = auth.get("token").asText();
         String userId = auth.get("userId").asText();
 
         byte[] oversizedContent = new byte[2 * 1024 * 1024 + 1]; // 2MB + 1 byte
