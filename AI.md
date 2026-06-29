@@ -31,3 +31,20 @@ Los cambios realizados se dividen entre el Backend (`CartAI`) y el Frontend (`Ca
 6. **Promoción de ficheros de bucket temporal a permanente (Backend):**
    - **Problema:** Al actualizar el perfil con un nuevo avatar, el caso de uso `UpdateUserUseCase` no movía el fichero de MinIO del bucket temporal (que auto-expira) al permanente.
    - **Solución:** Se implementó la lógica de `storagePort.promoteFile()` y limpieza de avatar antiguo dentro de `UpdateUserUseCase`.
+
+### Estrategia de Testing de Integración (Backend)
+
+Durante las últimas sesiones se ha definido un estándar estricto para los Tests de Integración (`*IT.java`) con el fin de evitar dependencias entre tests, problemas de estado compartido y fallos en cascada.
+
+1. **Patrón Atómico (Atomic Integration Tests)**:
+   - Los tests de integración en la capa REST **no comparten estado**.
+   - Se ha eliminado la clase `BaseFlowIT` (que compartía tokens JWT estáticos y obligaba a usar `@Order`).
+   - Se usa una clase base muy ligera llamada `BaseIT`, la cual inicializa el contexto de Spring (`@SpringBootTest`, `@AutoConfigureMockMvc`, MongoDB embebido con flapdoodle, mocks de MinIO y Kafka).
+   - `BaseIT` no guarda ningún estado de sesión. Contiene utilidades sin estado (`login()`, `removeTestUsers()`, `cleanCollections()`).
+
+2. **Aislamiento en cada Test**:
+   - Cada `@Test` debe ser responsable de **crear sus propios datos**, hacer **su propio login** para obtener un JWT fresco (usando el helper `login()`), y actuar.
+   - El orden de ejecución de los tests ya no importa.
+   - Limpieza: Los tests que creen datos fuera del flujo de "semilla" (bootstrap) deben limpiarlos en el `@AfterEach`. Por ejemplo, eliminando las colecciones específicas con `cleanCollections(...)` o eliminando usuarios específicos de prueba con `removeTestUsers(...)`.
+   
+Este diseño atómico prioriza la mantenibilidad, robustez y el aislamiento por encima de la reutilización de peticiones de login.
