@@ -5,6 +5,7 @@
 
 package cart.ai.shopping.application.usecases.shop.product;
 
+import cart.ai.shopping.infrastructure.config.TestStorageConfig;
 import cart.ai.shopping.infrastructure.in.rest.shop.dtos.CreateProductRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.shop.dtos.UpdateProductRestRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(TestStorageConfig.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProductFlowIT {
 
@@ -46,8 +49,8 @@ class ProductFlowIT {
     void shouldDenyCreateProductForCustomer() throws Exception {
         CreateProductRestRequest request = new CreateProductRestRequest("Laptop", "Desc", new BigDecimal("1500.00"), 10, List.of());
         mockMvc.perform(post("/api/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden());
     }
 
@@ -56,10 +59,10 @@ class ProductFlowIT {
     @WithMockUser(roles = "VENDOR")
     void shouldAllowCreateProductForVendor() throws Exception {
         CreateProductRestRequest request = new CreateProductRestRequest("Laptop", "Gaming Laptop", new BigDecimal("1500.00"), 10, List.of("img1"));
-        
+
         String response = mockMvc.perform(post("/api/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Laptop"))
                 .andReturn().getResponse().getContentAsString();
@@ -84,8 +87,8 @@ class ProductFlowIT {
     void shouldDenyUpdateProductForCustomer() throws Exception {
         UpdateProductRestRequest request = new UpdateProductRestRequest(sharedProductId, "Laptop Pro", "Desc", new BigDecimal("2000.00"), 5, List.of());
         mockMvc.perform(put("/api/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden());
     }
 
@@ -95,8 +98,8 @@ class ProductFlowIT {
     void shouldAllowUpdateProductForAdmin() throws Exception {
         UpdateProductRestRequest request = new UpdateProductRestRequest(sharedProductId, "Laptop Pro", "Gaming Laptop Pro", new BigDecimal("2000.00"), 5, List.of("img1", "img2"));
         mockMvc.perform(put("/api/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Laptop Pro"))
                 .andExpect(jsonPath("$.stock").value(5));
@@ -125,7 +128,7 @@ class ProductFlowIT {
     void shouldAllowDeleteProductForVendor() throws Exception {
         mockMvc.perform(delete("/api/products/" + sharedProductId))
                 .andExpect(status().isOk());
-                
+
         mockMvc.perform(get("/api/products/" + sharedProductId))
                 .andExpect(status().isNotFound());
     }

@@ -5,13 +5,16 @@
 
 package cart.ai.shopping;
 
+import cart.ai.shopping.infrastructure.config.TestStorageConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author Roberto Díaz
  */
 @SpringBootTest
+@Import(TestStorageConfig.class)
 class CartAIApplicationTests {
 
     @Test
