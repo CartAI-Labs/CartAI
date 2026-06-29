@@ -36,9 +36,6 @@ class ProductIT extends BaseIT {
 
     // ── helpers ───────────────────────────────────────────────────────────────
 
-    private String bearerOf(String token) {
-        return "Bearer " + token;
-    }
 
     /**
      * Creates a product as vendor and returns its ID.

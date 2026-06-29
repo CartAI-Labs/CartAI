@@ -88,6 +88,13 @@ public abstract class BaseIT {
         return objectMapper.readTree(result.getResponse().getContentAsString());
     }
 
+    /**
+     * Helper to format a token as a Bearer token header value.
+     */
+    protected String bearerOf(String token) {
+        return "Bearer " + token;
+    }
+
     // =========================================================================
     // Cleanup helpers
     // =========================================================================

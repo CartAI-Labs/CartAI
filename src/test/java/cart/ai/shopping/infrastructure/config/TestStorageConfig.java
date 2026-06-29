@@ -42,7 +42,7 @@ public class TestStorageConfig {
 
             @Override
             public InputStream downloadFile(String fileName) {
-                return InputStream.nullInputStream();
+                return new java.io.ByteArrayInputStream("fake-file-content".getBytes());
             }
 
             @Override

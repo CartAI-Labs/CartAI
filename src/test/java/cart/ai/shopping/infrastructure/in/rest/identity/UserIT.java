@@ -47,9 +47,6 @@ class UserIT extends BaseIT {
 
     // ── helpers ───────────────────────────────────────────────────────────────
 
-    private String bearerOf(String token) {
-        return "Bearer " + token;
-    }
 
     /**
      * Registers a new user and tracks their email for post-test cleanup.
