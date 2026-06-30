@@ -230,7 +230,7 @@ class UserIT extends BaseIT {
         String userId = auth.get("userId").asText();
 
         UpdateUserRestRequest req = new UpdateUserRestRequest(
-                userId, "Updated Name", CUSTOMER_EMAIL, Set.of("CUSTOMER"), null
+                userId, "Updated Name", Set.of("CUSTOMER"), null, null, null
         );
 
         mockMvc.perform(put("/api/users/" + userId)
@@ -250,7 +250,7 @@ class UserIT extends BaseIT {
         String vendorId = vendorAuth.get("userId").asText();
 
         UpdateUserRestRequest req = new UpdateUserRestRequest(
-                vendorId, "Admin Renamed Vendor", VENDOR_EMAIL, Set.of("VENDOR"), null
+                vendorId, "Admin Renamed Vendor", Set.of("VENDOR"), null, null, null
         );
 
         mockMvc.perform(put("/api/users/" + vendorId)
@@ -270,7 +270,7 @@ class UserIT extends BaseIT {
         String customerToken = customerAuth.get("token").asText();
 
         UpdateUserRestRequest req = new UpdateUserRestRequest(
-                adminId, "Hacked", ADMIN_EMAIL, Set.of("ADMIN"), null
+                adminId, "Hacked", Set.of("ADMIN"), null, null, null
         );
 
         mockMvc.perform(put("/api/users/" + adminId)

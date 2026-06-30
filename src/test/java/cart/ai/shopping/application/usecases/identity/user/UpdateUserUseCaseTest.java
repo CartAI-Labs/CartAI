@@ -13,6 +13,7 @@ import cart.ai.shopping.domain.model.identity.vos.Email;
 import cart.ai.shopping.domain.model.identity.vos.Permission;
 import cart.ai.shopping.domain.model.identity.vos.RoleId;
 import cart.ai.shopping.domain.model.identity.vos.UserId;
+import cart.ai.shopping.domain.ports.identity.PasswordEncoderPort;
 import cart.ai.shopping.domain.ports.identity.UserRepositoryPort;
 import cart.ai.shopping.domain.ports.identity.UserUpdatedEventPublisherPort;
 import cart.ai.shopping.domain.ports.storage.StoragePort;
@@ -46,6 +47,8 @@ class UpdateUserUseCaseTest {
     @Mock
     private UserUpdatedEventPublisherPort userUpdatedEventPublisherPort;
     @Mock
+    private PasswordEncoderPort passwordEncoderPort;
+    @Mock
     private StoragePort storagePort;
     @Mock
     private TempStoragePort tempStoragePort;
@@ -54,7 +57,7 @@ class UpdateUserUseCaseTest {
     @BeforeEach
     void setUp() {
         updateUserUseCase = new UpdateUserUseCase(
-                userRepositoryPort, userUpdatedEventPublisherPort, storagePort, tempStoragePort
+                userRepositoryPort, userUpdatedEventPublisherPort, passwordEncoderPort, storagePort, tempStoragePort
         );
     }
 
@@ -62,7 +65,7 @@ class UpdateUserUseCaseTest {
     void shouldReturnNotFoundWhenUserDoesNotExist() {
         when(userRepositoryPort.findByUserId(USER_ID)).thenReturn(null);
 
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John", "john@test.com", Set.of(CUSTOMER_ROLE), null);
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John", Set.of(CUSTOMER_ROLE), null, null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
@@ -72,19 +75,17 @@ class UpdateUserUseCaseTest {
     }
 
     @Test
-    void shouldReturnConflictWhenEmailTakenByAnotherUser() {
+    void shouldNotChangeEmailEvenIfAttempted() {
         User existingUser = new User(USER_ID, "John", new Email("john@test.com"), "hash", Set.of(CUSTOMER_ROLE));
-        User anotherUser = new User(new UserId("9999"), "Other", new Email("taken@test.com"), "hash", Set.of(CUSTOMER_ROLE));
         when(userRepositoryPort.findByUserId(USER_ID)).thenReturn(existingUser);
-        when(userRepositoryPort.findByEmail(new Email("taken@test.com"))).thenReturn(anotherUser);
+        when(userRepositoryPort.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John", "taken@test.com", Set.of(CUSTOMER_ROLE), null);
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), null, null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
-        assertTrue(result.hasError());
-        assertEquals(CONFLICT, result.getError());
-        verify(userRepositoryPort, never()).save(any());
+        assertFalse(result.hasError());
+        assertEquals("john@test.com", result.getValue().email().value());
     }
 
     @Test
@@ -94,7 +95,7 @@ class UpdateUserUseCaseTest {
         when(userRepositoryPort.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
         // Same avatarFileId as the existing one — no promotion should occur
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", "john@test.com", Set.of(CUSTOMER_ROLE), "existing-avatar.jpg");
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), "existing-avatar.jpg", null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
@@ -112,7 +113,7 @@ class UpdateUserUseCaseTest {
         when(userRepositoryPort.save(any())).thenAnswer(inv -> inv.getArgument(0));
         when(tempStoragePort.getBucketName()).thenReturn("test-temp-bucket");
 
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John", "john@test.com", Set.of(CUSTOMER_ROLE), "new-avatar.jpg");
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John", Set.of(CUSTOMER_ROLE), "new-avatar.jpg", null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
@@ -128,7 +129,7 @@ class UpdateUserUseCaseTest {
         when(userRepositoryPort.findByUserId(USER_ID)).thenReturn(existingUser);
         when(userRepositoryPort.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", "john@test.com", Set.of(CUSTOMER_ROLE), null);
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), null, null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
