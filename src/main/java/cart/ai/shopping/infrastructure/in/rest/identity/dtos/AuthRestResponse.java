@@ -22,7 +22,13 @@ public record AuthRestResponse(
 
         List<String> roles,
 
-        String avatarFileId
+        String avatarFileId,
+
+        String phone,
+
+        String taxId,
+
+        String preferredLanguage
 
 ) {
 }

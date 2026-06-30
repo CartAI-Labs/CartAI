@@ -23,7 +23,10 @@ public class UserRestMapper {
                 roles,
                 request.avatarFileId(),
                 request.oldPassword(),
-                request.newPassword()
+                request.newPassword(),
+                request.phone(),
+                request.taxId(),
+                request.preferredLanguage()
         );
     }
 
@@ -36,7 +39,10 @@ public class UserRestMapper {
                 user.name(),
                 user.email().value(),
                 user.roles().stream().map(Role::name).toList(),
-                user.avatarFileId()
+                user.avatarFileId(),
+                user.phone(),
+                user.taxId(),
+                user.preferredLanguage()
         );
     }
 }

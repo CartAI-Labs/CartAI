@@ -35,7 +35,10 @@ public class AuthRestMapper {
                 user.email().value(),
                 user.name(),
                 user.roles().stream().map(Role::name).toList(),
-                user.avatarFileId()
+                user.avatarFileId(),
+                user.phone(),
+                user.taxId(),
+                user.preferredLanguage()
         );
     }
 }

@@ -77,7 +77,10 @@ public class UpdateUserUseCase {
                 existingUser.email(),
                 finalPasswordHash,
                 command.roles(),
-                finalAvatarId
+                finalAvatarId,
+                command.phone(),
+                command.taxId(),
+                command.preferredLanguage()
         );
 
         User savedUser = userRepositoryPort.save(updatedUser);

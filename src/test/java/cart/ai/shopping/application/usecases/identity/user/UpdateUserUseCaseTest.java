@@ -65,7 +65,7 @@ class UpdateUserUseCaseTest {
     void shouldReturnNotFoundWhenUserDoesNotExist() {
         when(userRepositoryPort.findByUserId(USER_ID)).thenReturn(null);
 
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John", Set.of(CUSTOMER_ROLE), null, null, null);
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John", Set.of(CUSTOMER_ROLE), null, null, null, null, null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
@@ -80,7 +80,7 @@ class UpdateUserUseCaseTest {
         when(userRepositoryPort.findByUserId(USER_ID)).thenReturn(existingUser);
         when(userRepositoryPort.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), null, null, null);
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), null, null, null, null, null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
@@ -95,7 +95,7 @@ class UpdateUserUseCaseTest {
         when(userRepositoryPort.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
         // Same avatarFileId as the existing one — no promotion should occur
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), "existing-avatar.jpg", null, null);
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), "existing-avatar.jpg", null, null, null, null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
@@ -113,7 +113,7 @@ class UpdateUserUseCaseTest {
         when(userRepositoryPort.save(any())).thenAnswer(inv -> inv.getArgument(0));
         when(tempStoragePort.getBucketName()).thenReturn("test-temp-bucket");
 
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John", Set.of(CUSTOMER_ROLE), "new-avatar.jpg", null, null);
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John", Set.of(CUSTOMER_ROLE), "new-avatar.jpg", null, null, null, null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 
@@ -129,7 +129,7 @@ class UpdateUserUseCaseTest {
         when(userRepositoryPort.findByUserId(USER_ID)).thenReturn(existingUser);
         when(userRepositoryPort.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), null, null, null);
+        UpdateUserCommand command = new UpdateUserCommand("1001", "John Updated", Set.of(CUSTOMER_ROLE), null, null, null, null, null, null);
 
         Result<User> result = updateUserUseCase.execute(command);
 

@@ -10,33 +10,42 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Set;
-
 /**
  * @author Roberto Díaz
  */
-@Document("users")
+@Document("addresses")
 @Data
 @Builder
-public class UserDocument {
+public class AddressDocument {
 
     @Id
     private final String id;
 
-    private final String name;
+    private final String ownerId;
 
-    private final String email;
+    private final String ownerType;
 
-    private final String passwordHash;
+    private final String alias;
 
-    private final Set<String> roleIds;
+    private final String firstName;
 
-    private final String avatarFileId;
-    
+    private final String lastName;
+
+    private final String company;
+
+    private final String street;
+
+    private final String city;
+
+    private final String zipCode;
+
     private final String phone;
-    
-    private final String taxId;
-    
-    private final String preferredLanguage;
 
+    private final String state;
+
+    private final String country;
+
+    private final String notes;
+
+    private final boolean isDefault;
 }

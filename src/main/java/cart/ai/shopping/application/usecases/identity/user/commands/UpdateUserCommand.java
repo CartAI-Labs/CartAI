@@ -28,6 +28,12 @@ public record UpdateUserCommand(
 
         String oldPassword,
 
-        String newPassword
+        String newPassword,
+        
+        String phone,
+        
+        String taxId,
+        
+        String preferredLanguage
 ) {
 }
