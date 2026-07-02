@@ -33,7 +33,7 @@ public class OrderPlacedEventPublisherOutboxTransactionAdapter implements OrderP
     public void publish(OrderPlacedEvent event) {
         try {
             OutboxTransactionDocument outboxTransactionDocument = OutboxTransactionDocument.builder()
-                    .aggregateType(Order.class.getSimpleName().toLowerCase())
+                    .aggregateType(event.getClass().getName())
                     .aggregateId(event.orderId().value())
                     .key(event.userId().value())
                     .topic(TOPIC)

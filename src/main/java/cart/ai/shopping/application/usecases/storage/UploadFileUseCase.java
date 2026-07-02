@@ -11,13 +11,12 @@ import cart.ai.shopping.domain.common.result.Result;
 import cart.ai.shopping.domain.model.identity.User;
 import cart.ai.shopping.domain.model.identity.vos.UserId;
 import cart.ai.shopping.domain.model.storage.StoredFile;
-import cart.ai.shopping.domain.model.storage.vos.StoredFileEvent;
 import cart.ai.shopping.domain.ports.common.IncrementIdGeneratorPort;
 import cart.ai.shopping.domain.ports.identity.UserRepositoryPort;
-import cart.ai.shopping.domain.ports.storage.StoredFileEventPublisherPort;
 import cart.ai.shopping.domain.ports.storage.StoredFileRepositoryPort;
 import cart.ai.shopping.domain.ports.storage.TempStoragePort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,13 +27,13 @@ import static cart.ai.shopping.domain.common.result.ResultError.*;
  */
 @RequiredArgsConstructor
 @UseCase
+@Slf4j
 public class UploadFileUseCase {
 
     private final TempStoragePort tempStoragePort;
     private final StoredFileRepositoryPort storedFileRepositoryPort;
     private final IncrementIdGeneratorPort idGeneratorPort;
     private final UserRepositoryPort userRepositoryPort;
-    private final StoredFileEventPublisherPort storedFileEventPublisherPort;
 
     private static @NonNull String getExtension(UploadFileCommand command) {
         String originalFileName = command.originalFileName();
@@ -51,7 +50,7 @@ public class UploadFileUseCase {
 
     @Transactional
     public Result<StoredFile> execute(UploadFileCommand command) {
-        if (command == null || command.inputStream() == null || command.originalFileName().isBlank()) {
+        if (command == null || command.originalFileName().isBlank()) {
             return Result.error(BAD_REQUEST);
         }
 
@@ -97,16 +96,13 @@ public class UploadFileUseCase {
 
         try {
             StoredFile saved = storedFileRepositoryPort.save(storedFile);
-
-            storedFileEventPublisherPort.uploadConfirmed(
-                    new StoredFileEvent(uniqueFileName));
-
             return Result.success(saved);
         } catch (Exception e) {
             try {
                 tempStoragePort.deleteFile(uniqueFileName);
             } catch (Exception ex) {
-                // Ignore fallback failure, lifecycle policy will clean it up.
+                log.error(
+                    "Error deleting file ({}): {}", uniqueFileName, ex.getMessage(), ex);
             }
             return Result.error(INTERNAL_ERROR);
         }
