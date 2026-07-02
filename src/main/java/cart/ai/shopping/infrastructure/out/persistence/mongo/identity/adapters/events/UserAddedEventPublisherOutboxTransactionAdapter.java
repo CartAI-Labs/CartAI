@@ -33,7 +33,7 @@ public class UserAddedEventPublisherOutboxTransactionAdapter implements UserAdde
     public void added(UserAddedEvent event) {
         try {
             OutboxTransactionDocument outboxTransactionDocument = OutboxTransactionDocument.builder()
-                    .aggregateType(User.class.getSimpleName().toLowerCase())
+                    .aggregateType(event.getClass().getName())
                     .aggregateId(event.userId().value())
                     .key(event.userId().value())
                     .topic(TOPIC)

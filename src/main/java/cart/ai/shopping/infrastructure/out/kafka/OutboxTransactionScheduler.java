@@ -6,6 +6,7 @@
 package cart.ai.shopping.infrastructure.out.kafka;
 
 import cart.ai.shopping.infrastructure.out.persistence.mongo.common.documents.OutboxTransactionDocument;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -32,6 +33,7 @@ public class OutboxTransactionScheduler {
 
     private final MongoTemplate mongoTemplate;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
     @Scheduled(fixedDelay = 1000)
     public void processOutbox() {
@@ -48,7 +50,22 @@ public class OutboxTransactionScheduler {
         while ((event = mongoTemplate.findAndModify(query, update, OutboxTransactionDocument.class)) != null) {
             final OutboxTransactionDocument curEvent = event;
 
-            kafkaTemplate.send(event.getTopic(), event.getKey(), event.getPayload())
+            Object parsedPayload;
+            try {
+                Class<?> clazz = Class.forName(event.getAggregateType());
+                parsedPayload = objectMapper.readValue(event.getPayload(), clazz);
+            } catch (Exception e) {
+                // Fallback to JsonNode for backward compatibility or when class is missing
+                try {
+                    parsedPayload = objectMapper.readTree(event.getPayload());
+                } catch (Exception ex) {
+                    log.error("Failed to parse outbox payload for event {}", event.getId(), ex);
+                    updateStatus(event.getId(), OutboxTransactionDocument.FAIL);
+                    continue;
+                }
+            }
+
+            kafkaTemplate.send(event.getTopic(), event.getKey(), parsedPayload)
                     .whenComplete((result, throwable) -> {
                         if (throwable == null) {
                             updateStatus(curEvent.getId(), OutboxTransactionDocument.SUCCESS);

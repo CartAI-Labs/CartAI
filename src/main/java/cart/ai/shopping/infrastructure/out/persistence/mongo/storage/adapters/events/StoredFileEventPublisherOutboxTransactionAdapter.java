@@ -35,7 +35,7 @@ public class StoredFileEventPublisherOutboxTransactionAdapter implements StoredF
     private void saveOutbox(StoredFileEvent event, String topic) {
         try {
             OutboxTransactionDocument outboxTransactionDocument = OutboxTransactionDocument.builder()
-                    .aggregateType(StoredFile.class.getSimpleName().toLowerCase())
+                    .aggregateType(event.getClass().getName())
                     .aggregateId(event.fileName())
                     .key(event.fileName())
                     .topic(topic)

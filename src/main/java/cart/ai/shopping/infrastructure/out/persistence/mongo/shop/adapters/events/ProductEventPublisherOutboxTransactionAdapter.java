@@ -37,7 +37,7 @@ public class ProductEventPublisherOutboxTransactionAdapter implements ProductEve
     private void saveOutbox(String aggregateId, Object event, String topic) {
         try {
             OutboxTransactionDocument outboxTransactionDocument = OutboxTransactionDocument.builder()
-                    .aggregateType(Product.class.getSimpleName().toLowerCase())
+                    .aggregateType(event.getClass().getName())
                     .aggregateId(aggregateId)
                     .key(aggregateId)
                     .topic(topic)

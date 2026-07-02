@@ -33,7 +33,7 @@ public class UserUpdatedEventPublisherOutboxTransactionAdapter implements UserUp
     public void updated(UserUpdatedEvent event) {
         try {
             OutboxTransactionDocument outboxTransactionDocument = OutboxTransactionDocument.builder()
-                    .aggregateType(User.class.getSimpleName().toLowerCase())
+                    .aggregateType(event.getClass().getName())
                     .aggregateId(event.userId().value())
                     .key(event.userId().value())
                     .topic(TOPIC)
