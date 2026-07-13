@@ -116,7 +116,7 @@ Commit messages are prefixed with the corresponding Linear issue ID (e.g., `CAR-
 * Rate limiting for public upload endpoints is delegated to the infrastructure/web server layer (e.g. Nginx, API
   Gateway).
 
-### 2. Transactional Outbox Pattern
+### 3. Transactional Outbox Pattern
 
 To guarantee **At-Least-Once Delivery** and prevent inconsistencies between database updates and event publishing (e.g.,
 publishing a message to Kafka for a database transaction that ultimately failed and rolled back), we implement the
@@ -128,7 +128,7 @@ Transactional Outbox Pattern:
   asynchronous [OutboxTransactionScheduler](file:///Users/rober/work/CartAI/src/main/java/cart/ai/shopping/infrastructure/out/kafka/OutboxTransactionScheduler.java)
   polls MongoDB, publishes the events, and updates their status.
 
-### 3. Distributed Locking & Concurrent Mutual Exclusion
+### 4. Distributed Locking & Concurrent Mutual Exclusion
 
 To secure the Outbox Scheduler in clustered or multi-instance environments:
 
@@ -138,7 +138,7 @@ To secure the Outbox Scheduler in clustered or multi-instance environments:
   database level. Other instances are prevented from pulling the same message, ensuring zero duplication at the
   scheduler level.
 
-### 4. Kafka Resilience & Poison Pill Mitigation
+### 5. Kafka Resilience & Poison Pill Mitigation
 
 * **Centralized Error Handling:** We use a global `CommonErrorHandler` configured with `DeadLetterPublishingRecoverer`
   in [KafkaErrorHandlerConfig](file:///Users/rober/work/CartAI/src/main/java/cart/ai/shopping/infrastructure/config/kafka/KafkaErrorHandlerConfig.java).
@@ -149,18 +149,25 @@ To secure the Outbox Scheduler in clustered or multi-instance environments:
   intercept parsing/deserialization errors immediately. This prevents invalid payloads (Poison Pills) from freezing the
   consumer thread.
 
-### 5. End-to-End Idempotency
+### 6. End-to-End Idempotency
 
 * **Producer Idempotency:** Enabled via `spring.kafka.producer.properties.enable.idempotence=true` to ensure network
   failures and retries between the application and the Kafka brokers do not write duplicate messages inside the topics.
 * **Consumer Idempotency:** Application state validation (e.g., verifying if a shopping cart already exists before
   creating it) is implemented to handle double-delivery scenarios gracefully.
 
-### 6. Strict Event Ordering
+### 7. Strict Event Ordering
 
 * To ensure all actions related to a single customer are processed in the sequence they occurred, events are partitioned
   using the `userId` as the Kafka message key (configured in the Outbox message entity), routing all customer-scoped
   events to the same partition.
+
+### 8. AI-Driven Asynchronous Catalog Ingestion (CartAI-ProductWorker)
+
+In addition to standard REST endpoints, CartAI supports event-driven product creation via Apache Kafka.
+* A dedicated Python worker (**CartAI-ProductWorker**) acts as an asynchronous ingestion pipeline.
+* It receives unstructured catalog documents (PDFs, images), extracts structured product data using Generative AI (LiteLLM, Instructor, Vision Models), and publishes the result to the `catalog.ready` Kafka topic.
+* The Java backend consumes this topic securely, parsing the AI payload and persisting the new products directly into the catalog domain without blocking any HTTP threads.
 
 ---
 
