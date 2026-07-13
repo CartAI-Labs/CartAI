@@ -11,6 +11,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roberto Díaz
@@ -30,6 +31,8 @@ public record CreateProductRestRequest(
         @PositiveOrZero
         Integer stock,
 
-        List<String> imageFileIds
+        List<String> imageFileIds,
+        
+        Map<String, String> attributes
 ) {
 }

@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roberto Díaz
@@ -33,5 +34,7 @@ public class ProductDocument {
     private final Integer stock;
 
     private final List<String> imageFileIds;
+
+    private final Map<String, String> attributes;
 
 }

@@ -22,6 +22,7 @@ public class ProductMapper {
                 .price(product.getPrice())
                 .stock(product.getStock())
                 .imageFileIds(product.getImageFileIds())
+                .attributes(product.getAttributes())
                 .build();
     }
 
@@ -32,7 +33,8 @@ public class ProductMapper {
                 productDocument.getDescription(),
                 productDocument.getPrice(),
                 productDocument.getStock(),
-                productDocument.getImageFileIds()
+                productDocument.getImageFileIds(),
+                productDocument.getAttributes()
         );
     }
 }

@@ -18,7 +18,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Initializer to seed default shop products for development if the database is empty.
@@ -42,32 +44,39 @@ public class ProductInitializer {
 
             createProduct("Cart•AI Smart Terminal", 
                     "Terminal inteligente de punto de venta con recomendaciones por IA en tiempo real y pantalla táctil HD.", 
-                    new BigDecimal("299.99"), 5);
+                    new BigDecimal("299.99"), 5,
+                    Map.of(
+                        "Pantalla", "15.6 pulgadas HD",
+                        "Procesador", "ARM Cortex-A76",
+                        "Conectividad", "Wi-Fi 6, 5G",
+                        "Batería", "8000 mAh"
+                    ));
 
             createProduct("Predictive Stock Tracker", 
                     "Sensor IoT ultrapreciso para estanterías que predice la rotura de stock y automatiza pedidos.", 
-                    new BigDecimal("149.50"), 3);
+                    new BigDecimal("149.50"), 3, null);
 
             createProduct("Automated Cart Tag", 
                     "Etiqueta digital inteligente de tinta electrónica para carritos de compra que sincroniza precios dinámicos.", 
-                    new BigDecimal("19.99"), 15);
+                    new BigDecimal("19.99"), 15, null);
 
             createProduct("Hexagonal Hub Gateway", 
                     "Servidor de comunicación local con arquitectura hexagonal redundante y encriptación de grado militar.", 
-                    new BigDecimal("599.00"), 2);
+                    new BigDecimal("599.00"), 2, null);
 
             createProduct("Hexagonal Hub Gateway 2", 
                     "Servidor de comunicación remoto con arquitectura hexagonal redundante y encriptación de grado militar.", 
-                    new BigDecimal("1000.00"), 0);
+                    new BigDecimal("1000.00"), 0, null);
 
             log.info("Mock products seeded successfully.");
         }
     }
 
-    private void createProduct(String name, String description, BigDecimal price, Integer stock) {
+    private void createProduct(String name, String description, BigDecimal price, Integer stock, Map<String, String> attributes) {
         String idStr = idGeneratorPort.generate(Product.class);
         ProductId id = new ProductId(idStr);
-        Product product = new Product(id, name, description, price, stock, List.of());
+        Map<String, String> finalAttributes = attributes != null ? attributes : Collections.emptyMap();
+        Product product = new Product(id, name, description, price, stock, List.of(), finalAttributes);
         productRepositoryPort.save(product);
         log.info("Seeded product: {} (ID: {})", name, idStr);
     }

@@ -48,9 +48,16 @@ public class CatalogReadyListener {
                 name = event.getBrand() + " " + name;
             }
 
-            String attributesStr = event.getAttributes() != null ? event.getAttributes().toString() : "{}";
-            String description = "Category: " + event.getCategory() + "\n" +
-                                 "Attributes: " + attributesStr;
+            Map<String, String> attributes = null;
+            if (event.getAttributes() != null) {
+                attributes = event.getAttributes().entrySet().stream()
+                        .collect(java.util.stream.Collectors.toMap(
+                                Map.Entry::getKey,
+                                e -> String.valueOf(e.getValue())
+                        ));
+            }
+
+            String description = "Category: " + event.getCategory();
 
             BigDecimal price = event.getPrice() != null ? BigDecimal.valueOf(event.getPrice()) : BigDecimal.ZERO;
             Integer defaultStock = 10; // Default stock for newly extracted catalog items
@@ -60,7 +67,8 @@ public class CatalogReadyListener {
                     description,
                     price,
                     defaultStock,
-                    Collections.emptyList()
+                    Collections.emptyList(),
+                    attributes
             );
 
             createProductUseCase.execute(command);

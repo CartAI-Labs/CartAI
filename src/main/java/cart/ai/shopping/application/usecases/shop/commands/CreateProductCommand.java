@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roberto Díaz
@@ -32,6 +33,8 @@ public record CreateProductCommand(
         @Min(value = 0, message = "Stock could not be negative")
         Integer stock,
 
-        List<String> imageFileIds
+        List<String> imageFileIds,
+        
+        Map<String, String> attributes
 ) {
 }
