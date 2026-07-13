@@ -12,7 +12,9 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -32,6 +34,7 @@ public class Product {
     @NonNull
     private Integer stock;
     private List<String> imageFileIds = new ArrayList<>();
+    private Map<String, String> attributes = new HashMap<>();
 
     public Product(@NonNull ProductId id, @NonNull String name, @NonNull String description, @NonNull BigDecimal price, @NonNull Integer stock) {
         this.id = id;
@@ -42,9 +45,16 @@ public class Product {
     }
 
     public Product(@NonNull ProductId id, @NonNull String name, @NonNull String description, @NonNull BigDecimal price, @NonNull Integer stock, List<String> imageFileIds) {
+        this(id, name, description, price, stock, imageFileIds, null);
+    }
+
+    public Product(@NonNull ProductId id, @NonNull String name, @NonNull String description, @NonNull BigDecimal price, @NonNull Integer stock, List<String> imageFileIds, Map<String, String> attributes) {
         this(id, name, description, price, stock);
         if (imageFileIds != null) {
             this.imageFileIds.addAll(imageFileIds);
+        }
+        if (attributes != null) {
+            this.attributes.putAll(attributes);
         }
     }
 

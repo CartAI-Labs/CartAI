@@ -43,7 +43,7 @@ public class UpdateProductUseCase {
         List<String> oldFileIds = existingProduct.getImageFileIds() != null ? existingProduct.getImageFileIds() : Collections.emptyList();
         List<String> newFileIds = command.imageFileIds() != null ? command.imageFileIds() : Collections.emptyList();
 
-        Product product = new Product(productId, command.name(), command.description(), command.price(), command.stock(), command.imageFileIds());
+        Product product = new Product(productId, command.name(), command.description(), command.price(), command.stock(), command.imageFileIds(), command.attributes());
         Product saved = productRepositoryPort.save(product);
 
         productEventPublisherPort.productUpdated(
