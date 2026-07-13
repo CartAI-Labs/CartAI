@@ -211,29 +211,4 @@ src/main/java/cart/ai/shopping/
 
 ---
 
-## 🔮 Future Roadmap
-
-- [x] **MinIO / S3 Storage Integration:**
-  - Storing and retrieving product, user, and customer images using MinIO (S3-compatible) with Two-Phase Upload for
-    avatars.
-- [ ] **Email Verification on Registration:**
-  - Upon public registration, users are created in a `PENDING_VERIFICATION` state without the `CUSTOMER` role.
-  - A time-limited, single-use verification token is sent by email.
-  - Upon token validation, the user is activated and assigned the `CUSTOMER` role.
-  - A scheduled job purges unverified accounts older than 48 hours to prevent database pollution.
-  - A CAPTCHA (e.g. reCAPTCHA v3 or Cloudflare Turnstile) is validated server-side before any data is persisted to
-    prevent bot-driven mass registration.
-- [ ] **Comprehensive Testing Suite:**
-  - **Unit:** Mockito-based tests for all UseCases, covering business validations and Two-Phase Upload promotion logic.
-  - **Integration (E2E):** MockMvc-based atomic tests for all domains (`identity`, `storage`, `cart`, `order`).
-  - **Testcontainers:** Replace embedded MongoDB (Flapdoodle) with Docker-based Testcontainers running MongoDB as a Replica Set to fully support and test Spring Data multi-document transactions.
-- [ ] **React Frontend Application:**
-    - Build a modern user interface using React, TypeScript, and Vite.
-  - Leverage HSL-tailored designs, subtle animations, and fully responsive grids for product listing, cart checkout, and
-    customer dashboards.
-- [ ] **Dockerization & Orchestration:**
-    - Containerize the Spring Boot backend, the React frontend, MongoDB, and Apache Kafka.
-    - Provide a single `docker-compose.yml` to spin up the entire local development environment instantly.
-- [ ] **AWS Cloud Deployment:**
-    - Set up secure infrastructure on AWS (EC2/ECS, DocumentDB for Mongo, MSK for Kafka).
-    - Implement TLS/SSL security and SASL/SCRAM authentication for Apache Kafka.
+## 🔮 Future Roadmap See https://linear.app/cartai-shop/team/CAR/overview
