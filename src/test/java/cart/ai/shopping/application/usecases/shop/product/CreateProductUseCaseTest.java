@@ -36,11 +36,14 @@ class CreateProductUseCaseTest {
     @Mock
     private IncrementIdGeneratorPort incrementIdGeneratorPort;
 
+    @Mock
+    private cart.ai.shopping.domain.ports.shop.ProductEventPublisherPort productEventPublisherPort;
+
     private CreateProductUseCase createProductUseCase;
 
     @BeforeEach
     void setUp() {
-        createProductUseCase = new CreateProductUseCase(productRepositoryPort, incrementIdGeneratorPort);
+        createProductUseCase = new CreateProductUseCase(productRepositoryPort, incrementIdGeneratorPort, productEventPublisherPort);
     }
 
     @Test
