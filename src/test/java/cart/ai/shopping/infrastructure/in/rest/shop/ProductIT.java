@@ -43,7 +43,7 @@ class ProductIT extends BaseIT {
     private String createProductAsVendor(String name) throws Exception {
         var auth = login(VENDOR_EMAIL, VENDOR_PASS);
         CreateProductRestRequest req = new CreateProductRestRequest(
-                name, "Test description", new BigDecimal("99.99"), 10, List.of()
+                name, "Test description", new BigDecimal("99.99"), 10, List.of(), java.util.Map.of()
         );
         String response = mockMvc.perform(post("/api/products")
                         .header("Authorization", bearerOf(auth.get("token").asText()))
@@ -63,7 +63,7 @@ class ProductIT extends BaseIT {
     void vendorCanCreateProduct() throws Exception {
         var auth = login(VENDOR_EMAIL, VENDOR_PASS);
         CreateProductRestRequest req = new CreateProductRestRequest(
-                "Gaming Laptop", "High-end laptop", new BigDecimal("1500.00"), 5, List.of("img1.jpg")
+                "Gaming Laptop", "High-end laptop", new BigDecimal("1500.00"), 5, List.of("img1.jpg"), java.util.Map.of()
         );
 
         mockMvc.perform(post("/api/products")
@@ -79,7 +79,7 @@ class ProductIT extends BaseIT {
     void customerCannotCreateProduct() throws Exception {
         var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
         CreateProductRestRequest req = new CreateProductRestRequest(
-                "Illegal Product", "Should fail", new BigDecimal("1.00"), 1, List.of()
+                "Illegal Product", "Should fail", new BigDecimal("1.00"), 1, List.of(), java.util.Map.of()
         );
 
         mockMvc.perform(post("/api/products")
@@ -157,7 +157,7 @@ class ProductIT extends BaseIT {
 
         var auth = login(ADMIN_EMAIL, ADMIN_PASS);
         UpdateProductRestRequest req = new UpdateProductRestRequest(
-                productId, "New Name", "Updated desc", new BigDecimal("200.00"), 3, List.of()
+                productId, "New Name", "Updated desc", new BigDecimal("200.00"), 3, List.of(), java.util.Map.of()
         );
 
         mockMvc.perform(put("/api/products")
@@ -175,7 +175,7 @@ class ProductIT extends BaseIT {
 
         var auth = login(VENDOR_EMAIL, VENDOR_PASS);
         UpdateProductRestRequest req = new UpdateProductRestRequest(
-                productId, "Published Product", "Ready for sale", new BigDecimal("299.99"), 20, List.of()
+                productId, "Published Product", "Ready for sale", new BigDecimal("299.99"), 20, List.of(), java.util.Map.of()
         );
 
         mockMvc.perform(put("/api/products")
@@ -192,7 +192,7 @@ class ProductIT extends BaseIT {
 
         var auth = login(CUSTOMER_EMAIL, CUSTOMER_PASS);
         UpdateProductRestRequest req = new UpdateProductRestRequest(
-                productId, "Hacked", "Hacked", new BigDecimal("0.01"), 999, List.of()
+                productId, "Hacked", "Hacked", new BigDecimal("0.01"), 999, List.of(), java.util.Map.of()
         );
 
         mockMvc.perform(put("/api/products")
