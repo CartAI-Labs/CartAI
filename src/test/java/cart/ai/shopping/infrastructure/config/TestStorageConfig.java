@@ -107,4 +107,18 @@ public class TestStorageConfig {
                 .thenReturn(CompletableFuture.completedFuture(mock(SendResult.class)));
         return mockTemplate;
     }
+
+    @Bean
+    @Primary
+    public reactor.kafka.receiver.ReceiverOptions<String, String> testKafkaReceiverOptions() {
+        return reactor.kafka.receiver.ReceiverOptions.create(java.util.Map.of(
+                org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG, "test",
+                org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"
+        ));
+    }
+
+    @Bean
+    public org.springframework.boot.autoconfigure.kafka.KafkaProperties kafkaProperties() {
+        return new org.springframework.boot.autoconfigure.kafka.KafkaProperties();
+    }
 }
