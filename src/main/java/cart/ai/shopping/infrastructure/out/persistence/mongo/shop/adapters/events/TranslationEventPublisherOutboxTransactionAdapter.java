@@ -5,19 +5,16 @@
 
 package cart.ai.shopping.infrastructure.out.persistence.mongo.shop.adapters.events;
 
-import cart.ai.shopping.domain.model.shop.Product;
-import cart.ai.shopping.domain.model.shop.vos.ProductCreatedEvent;
-import cart.ai.shopping.domain.model.shop.vos.ProductUpdatedEvent;
-import cart.ai.shopping.domain.ports.shop.ProductEventPublisherPort;
+import cart.ai.shopping.domain.model.shop.events.TranslationRequestedEvent;
+import cart.ai.shopping.domain.ports.shop.TranslationEventPublisherPort;
 import cart.ai.shopping.infrastructure.out.persistence.mongo.common.documents.OutboxTransactionDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Roberto Díaz
@@ -25,21 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ProductEventPublisherOutboxTransactionAdapter implements ProductEventPublisherPort {
+public class TranslationEventPublisherOutboxTransactionAdapter implements TranslationEventPublisherPort {
 
-    private static final String PRODUCT_CREATED_TOPIC = "product-created-topic";
-    private static final String PRODUCT_UPDATED_TOPIC = "product-updated-topic";
+    private static final String TRANSLATION_REQUESTED_TOPIC = "translation.requested";
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
 
     @Override
-    public void productCreated(ProductCreatedEvent event) {
-        saveOutbox(event.productId(), event, PRODUCT_CREATED_TOPIC);
-    }
-
-    @Override
-    public void productUpdated(ProductUpdatedEvent event) {
-        saveOutbox(event.productId(), event, PRODUCT_UPDATED_TOPIC);
+    public void publishTranslationRequested(TranslationRequestedEvent event) {
+        saveOutbox(event.getProductId(), event, TRANSLATION_REQUESTED_TOPIC);
     }
 
     private void saveOutbox(String aggregateId, Object event, String topic) {

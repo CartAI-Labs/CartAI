@@ -38,7 +38,7 @@ class OrderIT extends BaseIT {
     private String createProductAsVendor(String name) throws Exception {
         var auth = login(VENDOR_EMAIL, VENDOR_PASS);
         CreateProductRestRequest req = new CreateProductRestRequest(
-                name, "Test desc", new BigDecimal("10.00"), 100, List.of()
+                name, "Test desc", new BigDecimal("10.00"), 100, List.of(), java.util.Map.of()
         );
         String response = mockMvc.perform(post("/api/products")
                         .header("Authorization", bearerOf(auth.get("token").asText()))

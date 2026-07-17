@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import static cart.ai.shopping.domain.common.result.ResultError.INTERNAL_ERROR;
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +55,7 @@ class CreateProductUseCaseTest {
         Product existingProduct = new Product(new ProductId(generatedId), "Laptop", "Desc", BigDecimal.TEN, 5);
         when(productRepositoryPort.find(new ProductId(generatedId))).thenReturn(existingProduct);
 
-        CreateProductCommand command = new CreateProductCommand("New Laptop", "Desc", BigDecimal.TEN, 5, List.of());
+        CreateProductCommand command = new CreateProductCommand("New Laptop", "Desc", BigDecimal.TEN, 5, List.of(), Map.of());
 
         var result = createProductUseCase.execute(command);
 
@@ -70,7 +71,7 @@ class CreateProductUseCaseTest {
         when(productRepositoryPort.find(new ProductId(generatedId))).thenReturn(null);
         when(productRepositoryPort.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        CreateProductCommand command = new CreateProductCommand("New Laptop", "Desc", BigDecimal.TEN, 5, List.of("img1"));
+        CreateProductCommand command = new CreateProductCommand("New Laptop", "Desc", BigDecimal.TEN, 5, List.of("img1"), Map.of());
 
         var result = createProductUseCase.execute(command);
 

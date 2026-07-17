@@ -7,6 +7,9 @@ package cart.ai.shopping.infrastructure.in.kafka.shop;
 
 import cart.ai.shopping.application.usecases.shop.commands.CreateProductCommand;
 import cart.ai.shopping.application.usecases.shop.product.CreateProductUseCase;
+import cart.ai.shopping.domain.model.shop.Product;
+import cart.ai.shopping.domain.model.shop.events.TranslationRequestedEvent;
+import cart.ai.shopping.domain.ports.shop.TranslationEventPublisherPort;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -35,21 +38,24 @@ import java.util.stream.Collectors;
 public class CatalogReadyConsumer {
 
     private final CreateProductUseCase createProductUseCase;
+    private final TranslationEventPublisherPort translationEventPublisherPort;
     private final ObjectMapper objectMapper;
     private final KafkaReceiver<String, String> kafkaReceiver;
 
     public CatalogReadyConsumer(
             CreateProductUseCase createProductUseCase,
+            TranslationEventPublisherPort translationEventPublisherPort,
             ObjectMapper objectMapper,
             ReceiverOptions<String, String> receiverOptions) {
         
         this.createProductUseCase = createProductUseCase;
+        this.translationEventPublisherPort = translationEventPublisherPort;
         this.objectMapper = objectMapper;
         
         // Configure topic subscription and specific properties for this listener
         ReceiverOptions<String, String> options = receiverOptions
                 .subscription(List.of("catalog.ready"))
-                .consumerProperty(ConsumerConfig.GROUP_ID_CONFIG, "cartai-java-backend");
+                .consumerProperty(ConsumerConfig.GROUP_ID_CONFIG, "cartai-catalog-ready");
 
         this.kafkaReceiver = KafkaReceiver.create(options);
     }
@@ -97,8 +103,27 @@ public class CatalogReadyConsumer {
                         );
 
                         // 3. Execute synchronous domain logic (writes to MongoDB)
-                        createProductUseCase.execute(command);
-                        log.info("Product successfully ingested into the catalog: {}", name);
+                                var result = createProductUseCase.execute(command);
+
+                                if (!result.hasError()) {
+                                    Product product = result.getValue();
+                                    log.info("Product successfully ingested into the catalog: {}", name);
+
+                                    // 4. Request translations for the newly created product
+                                    // We use English and Spanish by default as specified in CAR-27
+                                    TranslationRequestedEvent translationEvent = new TranslationRequestedEvent(
+                                            product.getId().value(),
+                                            product.getName(),
+                                            product.getDescription(),
+                                            product.getAttributes(),
+                                            List.of("en_US", "es_ES")
+                                    );
+
+                                    translationEventPublisherPort.publishTranslationRequested(translationEvent);
+                                    log.info("Requested translations for product {}", product.getId().value());
+                                } else {
+                                    log.error("Failed to create product from catalog AI extraction: {}", result.getError());
+                                }
                         return true;
                     })
                     // Crucial: Offload the blocking domain logic to an elastic thread pool 
