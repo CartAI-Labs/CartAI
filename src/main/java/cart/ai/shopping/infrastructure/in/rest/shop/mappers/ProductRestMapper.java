@@ -8,6 +8,7 @@ package cart.ai.shopping.infrastructure.in.rest.shop.mappers;
 import cart.ai.shopping.application.usecases.shop.commands.CreateProductCommand;
 import cart.ai.shopping.application.usecases.shop.commands.UpdateProductCommand;
 import cart.ai.shopping.domain.model.shop.Product;
+import cart.ai.shopping.domain.model.shop.ProductTranslation;
 import cart.ai.shopping.infrastructure.in.rest.shop.dtos.CreateProductRestRequest;
 import cart.ai.shopping.infrastructure.in.rest.shop.dtos.ProductRestResponse;
 import cart.ai.shopping.infrastructure.in.rest.shop.dtos.UpdateProductRestRequest;
@@ -30,5 +31,10 @@ public class ProductRestMapper {
     public static ProductRestResponse toResponse(Product product) {
         return new ProductRestResponse(
                 product.getId().value(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), product.getImageFileIds(), product.getAttributes());
+    }
+
+    public static ProductRestResponse toResponse(Product product, ProductTranslation translation) {
+        return new ProductRestResponse(
+                product.getId().value(), translation.getName(), translation.getDescription(), product.getPrice(), product.getStock(), product.getImageFileIds(), translation.getAttributes());
     }
 }
